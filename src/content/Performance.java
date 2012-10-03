@@ -15,7 +15,7 @@ public class Performance {
 	// parameters
 	boolean bPlaying = false;
 	boolean bPlayMidi;
-	float scale_face = 0.35f;
+	float scale_face = 0.32f;
 	float scale_hands = 0.608f;
 	
 	// planes for keyboard

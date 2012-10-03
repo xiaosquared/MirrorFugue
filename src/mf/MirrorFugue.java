@@ -12,14 +12,12 @@ import codeanticode.gsvideo.*;
 
 public class MirrorFugue extends PApplet {  
   private static final long serialVersionUID = 1L;
- 
-  //test comment
-  
+
   // old demo
   Performance ravel2, ravel3;
   
   // user study
-  Performance satie, ravel, bach, chopin, gershwin, improv, satie_long;
+  Performance satie, ravel, bach, chopin, gershwin, improv, satie_long, marvin;
   
   Performance current_performance;
   
@@ -125,7 +123,10 @@ public class MirrorFugue extends PApplet {
 	  chopin = new Performance(new GSMovie(this, "Chopin_HANDS.mov"), new GSMovie(this, "Chopin_FACE.mov"), "data/Chopin.MID", 
 				plane_0, plane_1, plane_2);
 	  improv = new Performance(new GSMovie(this, "Improv_HANDS.mov"), new GSMovie(this, "Improv_FACE.mov"), "data/Improv.MID", 
-				plane_0, plane_1, plane_2);	  
+				plane_0, plane_1, plane_2);	 
+	  marvin = new Performance(new GSMovie(this, "marvin/marvin_hands_opening.mov"), 
+			  	new GSMovie(this, "marvin/marvin_face_opening.mov"), "data/marvin/marvin.mid",
+			  	plane_0, plane_1, plane_2);
   }
   
   public void initOldDemo() {
@@ -221,6 +222,11 @@ public class MirrorFugue extends PApplet {
 	  	case 103:
 	  		println("SATIE FULL");
 	  		switchPiece(satie_long);
+	  		break;
+	  	case 104:
+	  		println("marvin");
+	  		switchPiece(marvin);
+	  		break;
 	  }
   }
   
