@@ -152,6 +152,20 @@ public class MirrorFugue extends PApplet {
 		current_performance.drawFace(this);
   }
 
+  private void playPerformance(int midi_delay) {
+	  current_performance.play(bPlayMidi);
+	  while(!current_performance.ready()) {
+		  delay(10);
+	  }
+	  current_performance.pause();			// when it's ready, reset and start everything together
+	  current_performance.rewind();
+	  
+	  current_performance.playMidi();		// put in a little delay between starting midi and video to compensate for dsk delay
+	  delay(midi_delay);
+	  
+	  current_performance.play(bPlayMidi);
+  }
+  
   public void keyPressed() {
 	  println("key pressed: " + keyCode);
 	  switch (keyCode) {
@@ -159,8 +173,7 @@ public class MirrorFugue extends PApplet {
 		  if (current_performance.isPlaying()) 
 			  current_performance.pause();
 		  else {
-			  delay(4000);
-			  current_performance.play(bPlayMidi);
+			playPerformance(400);
 		  }
 		  break;
 	  	case 109:

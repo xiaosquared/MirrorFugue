@@ -84,13 +84,18 @@ public class Performance {
 		return movie_hands.ready() && movie_face.ready();
 	}
 	
+	
+	public void playMidi() {
+		midi.playMidi();
+	}
+	
 	public void play(boolean bPlayMidi) {
 		bPlaying = true;
-		
-		if (bPlayMidi) {
-			midi.playMidi();
-		}
-		
+
+//		if (bPlayMidi) {
+//			midi.playMidi();
+//		}
+//	
 		movie_hands.play();
 		movie_face.play();
 		
