@@ -15,8 +15,9 @@ public class Performance {
 	// parameters
 	boolean bPlaying = false;
 	boolean bPlayMidi;
-	float scale_face = 0.32f;
+	float scale_face = 0.336f;
 	float scale_hands = 0.608f;
+	float y_offset = 0.3f;
 	
 	// planes for keyboard
 	PGraphics plane_0;
@@ -36,6 +37,12 @@ public class Performance {
 		plane_1 = plane1;
 		plane_2 = plane2;
 	}
+	
+	public Performance(GSMovie movie_hands, GSMovie movie_face, String midi_file,
+			PGraphics plane0, PGraphics plane1, PGraphics plane2, float scale_face) {
+		this(movie_hands, movie_face, midi_file, plane0, plane1, plane2);
+		this.scale_face = scale_face;
+	}
 
 	public boolean isPlaying() {
 		return bPlaying;
@@ -48,7 +55,7 @@ public class Performance {
 	
 	public void drawFace(PApplet parent) {
 		parent.pushMatrix();
-			parent.translate(parent.width * 0.48f, parent.height * 0.29f);
+			parent.translate(parent.width * 0.48f, parent.height * y_offset);
 			parent.scale(-scale_face, scale_face);
 			parent.image(movie_face, 0,0);
 		parent.popMatrix();
@@ -74,7 +81,9 @@ public class Performance {
 	
 	public void drawHandOrganMode(PApplet parent) {
 		parent.pushMatrix();
-			parent.translate(parent.width * 0.44f, parent.height * 0.798f);
+			//parent.translate(parent.width * 0.44f, parent.height * 0.798f);
+			
+			parent.translate(parent.width * 0.44f, parent.height * .798f);
 			parent.scale(scale_hands, scale_hands);
 			parent.image(movie_hands, 3, 0);
 		parent.popMatrix();

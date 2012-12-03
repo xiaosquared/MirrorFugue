@@ -17,7 +17,10 @@ public class MirrorFugue extends PApplet {
   Performance ravel2, ravel3;
   
   // user study
-  Performance satie, ravel, bach, chopin, gershwin, improv, satie_long, marvin;
+  Performance ravel, bach, gershwin, improv, satie_long, marvin, chopin, alisa, chopin_test, chopin_parts_all;
+  
+  // donal
+  Performance donal_prelude, ugly_beauty, autumn_leaves, autumn_leaves2;
   
   Performance current_performance;
   
@@ -68,14 +71,14 @@ public class MirrorFugue extends PApplet {
     
     current_performance.loadMidi();
     
-    // PLAY!!
-    current_performance.play(false);		// first start the movie to let it load
-    while (!current_performance.ready()) {
-    	delay(200);
-    }
-    current_performance.pause();			// when it's ready, reset and start everything together
-    current_performance.rewind();
-    //current_performance.play(bPlayMidi);
+    clearScreen();
+  }
+  
+  private void clearScreen() {
+	  fill(0);
+	  rect(0, 0, width, 800);
+	  fill(100);
+	  rect(0, 500, width, 800);
   }
 
   private void setSurfacesStudy(){
@@ -110,29 +113,58 @@ public class MirrorFugue extends PApplet {
   }
   
   private void initUserStudy() {
-	  gershwin = new Performance(new GSMovie(this, "Gershwin_HANDS.mov"), new GSMovie(this, "Gershwin_FACE.mov"), "data/Gershwin.MID", 
+	  gershwin = new Performance(new GSMovie(this, "xx/Gershwin_HANDS.mov"), new GSMovie(this, "xx/Gershwin_FACE.mov"), "data/xx/Gershwin.MID", 
 				plane_0, plane_1, plane_2); 
-	  satie = new Performance(new GSMovie(this, "Satie_HANDS.mov"), new GSMovie(this, "Satie_FACE.mov"), "data/Satie.MID", 
+	  satie_long = new Performance(new GSMovie(this, "xx/Satie_long_HANDS.mov"), new GSMovie(this, "xx/Satie_long_FACE.mov"), "data/xx/Satie_long.MID", 
 				plane_0, plane_1, plane_2);
-	  satie_long = new Performance(new GSMovie(this, "Satie_long_HANDS.mov"), new GSMovie(this, "Satie_long_FACE.mov"), "data/Satie_long.MID", 
+	  bach = new Performance(new GSMovie(this, "xx/Bach_HANDS.mov"), new GSMovie(this, "xx/Bach_FACE.mov"), "xx/data/Bach.MID", 
 				plane_0, plane_1, plane_2);
-	  bach = new Performance(new GSMovie(this, "Bach_HANDS.mov"), new GSMovie(this, "Bach_FACE.mov"), "data/Bach.MID", 
+	  ravel = new Performance(new GSMovie(this, "xx/Ravel_HANDS.mov"), new GSMovie(this, "xx/Ravel_FACE.mov"), "xx/data/Ravel.MID", 
 				plane_0, plane_1, plane_2);
-	  ravel = new Performance(new GSMovie(this, "Ravel_HANDS.mov"), new GSMovie(this, "Ravel_FACE.mov"), "data/Ravel.MID", 
-				plane_0, plane_1, plane_2);
-	  chopin = new Performance(new GSMovie(this, "Chopin_HANDS.mov"), new GSMovie(this, "Chopin_FACE.mov"), "data/Chopin.MID", 
-				plane_0, plane_1, plane_2);
-	  improv = new Performance(new GSMovie(this, "Improv_HANDS.mov"), new GSMovie(this, "Improv_FACE.mov"), "data/Improv.MID", 
+	  improv = new Performance(new GSMovie(this, "xx/Improv_HANDS.mov"), new GSMovie(this, "xx/Improv_FACE.mov"), "xx/data/Improv.MID", 
 				plane_0, plane_1, plane_2);	 
 	  marvin = new Performance(new GSMovie(this, "marvin/marvin_hands_opening.mov"), 
 			  	new GSMovie(this, "marvin/marvin_face_opening.mov"), "data/marvin/marvin.mid",
 			  	plane_0, plane_1, plane_2);
+	  chopin = new Performance(new GSMovie(this, "chopin_layers/chopin_hands_all.mov"), 
+			  	new GSMovie(this, "chopin_layers/chopin_face_all2.mov"), "data/chopin_layers/chopin_all.MID", 
+				plane_0, plane_1, plane_2);
+	  alisa = new Performance(new GSMovie(this, "alisa/dance_hands.mov"), 
+			  	new GSMovie(this, "alisa/dance_face.mov"), "data/alisa/dance.MID", 
+				plane_0, plane_1, plane_2);
+				//, 0.45f, 0.26f);
+	  chopin_test = new Performance(new GSMovie(this, "chopin_layers/tenor_harmony_hands.mov"), 
+			  	new GSMovie(this, "chopin_layers/tenor_harmony_face.mov"), "data/chopin_layers/tenor_harmony.MID", 
+				plane_0, plane_1, plane_2);
+	  chopin_parts_all = new Performance(new GSMovie(this, "chopin_layers/narrative_hands.mov"), 
+			  	new GSMovie(this, "chopin_layers/narrative_face.mov"), "data/chopin_layers/narrative.mid", 
+				plane_0, plane_1, plane_2, 0.38f);
+//	  chopin_parts_all = new Performance(new GSMovie(this, "chopin_layers/melodies_hands.mov"), 
+//			  	new GSMovie(this, "chopin_layers/melodies_face.mov"), "data/chopin_layers/melodies.mid", 
+//				plane_0, plane_1, plane_2);
+	  
+	  // donal
+	  ugly_beauty = new Performance(new GSMovie(this, "donal/ub_hands.mov"), 
+			  	new GSMovie(this, "donal/ub_face.mov"), "data/donal/ub.mid", 
+				plane_0, plane_1, plane_2);
+	  
+	  donal_prelude = new Performance(new GSMovie(this, "donal/prelude_hands.mov"), 
+			  	new GSMovie(this, "donal/prelude_face.mov"), "data/donal/prelude.mid", 
+				plane_0, plane_1, plane_2);
+	  
+	  autumn_leaves = new Performance(new GSMovie(this, "donal/autumn_hands.mov"), 
+			  	new GSMovie(this, "donal/autumn_face.mov"), "data/donal/autumn.mid", 
+				plane_0, plane_1, plane_2);
+	  
+	  autumn_leaves2 = new Performance(new GSMovie(this, "donal/autumn2_hands.mov"), 
+			  	new GSMovie(this, "donal/autumn_face.mov"), "data/donal/autumn2.mid", 
+				plane_0, plane_1, plane_2);
   }
   
   public void initOldDemo() {
-	  ravel2 = new Performance(new GSMovie(this, "mv2_hands.mov"), new GSMovie(this, "mv2_face.mov"), "data/mv2.mid", 
+	  ravel2 = new Performance(new GSMovie(this, "xx/mv2_hands.mov"), new GSMovie(this, "xx/mv2_face.mov"), "data/xx/mv2.mid", 
 				plane_0, plane_1, plane_2);
-	  ravel3 = new Performance(new GSMovie(this, "mv3_hands.mov"), new GSMovie(this, "mv3_face.mov"), "data/mv3.mid", 
+	  ravel3 = new Performance(new GSMovie(this, "xx/mv3_hands.mov"), new GSMovie(this, "xx/mv3_face.mov"), "data/xx/mv3.mid", 
 				plane_0, plane_1, plane_2);
   }
   
@@ -153,6 +185,7 @@ public class MirrorFugue extends PApplet {
   }
 
   private void playPerformance(int midi_delay) {
+	  key_mode = 0;
 	  current_performance.play(bPlayMidi);
 	  while(!current_performance.ready()) {
 		  delay(10);
@@ -169,7 +202,7 @@ public class MirrorFugue extends PApplet {
   public void keyPressed() {
 	  println("key pressed: " + keyCode);
 	  switch (keyCode) {
-	  	case 10:
+	  	case 32:
 		  if (current_performance.isPlaying()) 
 			  current_performance.pause();
 		  else {
@@ -178,6 +211,7 @@ public class MirrorFugue extends PApplet {
 		  break;
 	  	case 109:
 	  		current_performance.stop();
+	  		clearScreen();
 	  		break;
 	
 	  	// SOUND or Disklavier	
@@ -201,10 +235,7 @@ public class MirrorFugue extends PApplet {
 	  		break;
 	  	case 111:				// only disklavier
 	  		key_mode = 2;
-	  		fill(0);
-	  		rect(0, 0, width, 800);
-	  		fill(200);
-	  		rect(0, 560, width, 300);
+	  		clearScreen();
 	  		break;
 	  		
 	  	// SWITCHING PIECES!!
@@ -213,32 +244,36 @@ public class MirrorFugue extends PApplet {
 	  		switchPiece(ravel);
 	  		break;
 	  	case 98:
-	  		println("SATIE");
-	  		switchPiece(satie);
-	  		break;
-	  	case 99:
-	  		println("GERSHWIN");
-	  		switchPiece(gershwin);
-	  		break;
-	  	case 100:
-	  		println("CHOPIN");
-	  		switchPiece(chopin);
-	  		break;
-	  	case 101:
-	  		println("BACH");
-	  		switchPiece(bach);
-	  		break;
-	  	case 102:
 	  		println("IMPROV");
 	  		switchPiece(improv);
 	  		break;
+	  	case 99:
+	  		println("Narrative");
+	  		switchPiece(chopin_parts_all);
+	  		break;
+	  	case 100:
+	  		println("Ugly Beauty");
+	  		switchPiece(ugly_beauty);
+	  		break;
+	  	case 101:
+	  		println("PRELUDE");
+	  		switchPiece(donal_prelude);
+	  		break;
+	  	case 102:
+	  		println("AUTUMN");
+	  		switchPiece(autumn_leaves);
+	  		break;
 	  	case 103:
-	  		println("SATIE FULL");
+	  		println("SATIE");
 	  		switchPiece(satie_long);
 	  		break;
 	  	case 104:
 	  		println("marvin");
 	  		switchPiece(marvin);
+	  		break;
+	  	case 105:
+	  		println("alisa");
+	  		switchPiece(alisa);
 	  		break;
 	  }
   }
