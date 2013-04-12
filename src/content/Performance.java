@@ -5,6 +5,10 @@ import processing.core.PGraphics;
 import codeanticode.gsvideo.GSMovie;
 
 public class Performance {
+	// names
+	String song;
+	String player;
+	
 	// files
 	GSMovie movie_hands;
 	GSMovie movie_face;
@@ -24,8 +28,11 @@ public class Performance {
 	PGraphics plane_1;
 	PGraphics plane_2;
 	
-	public Performance(GSMovie movie_hands, GSMovie movie_face, String midi_file,
+	public Performance(String songFullName, String playerFullName,
+						GSMovie movie_hands, GSMovie movie_face, String midi_file,
 						PGraphics plane0, PGraphics plane1, PGraphics plane2) {
+		this.song = songFullName;
+		this.player = playerFullName;
 		this.movie_hands = movie_hands;
 		this.movie_face = movie_face;
 		
@@ -40,12 +47,20 @@ public class Performance {
 	
 	public Performance(GSMovie movie_hands, GSMovie movie_face, String midi_file,
 			PGraphics plane0, PGraphics plane1, PGraphics plane2, float scale_face) {
-		this(movie_hands, movie_face, midi_file, plane0, plane1, plane2);
+		this("", "", movie_hands, movie_face, midi_file, plane0, plane1, plane2);
 		this.scale_face = scale_face;
 	}
 
 	public boolean isPlaying() {
-		return bPlaying;
+		return bPlaying && (Math.abs(movie_face.time() - movie_face.duration()) > 0.01);
+	}
+	
+	public boolean isEnded() {
+		return (Math.abs(movie_face.time() - movie_face.duration()) <= 0.01);
+	}
+	
+	public boolean isPaused() {
+		return !bPlaying;
 	}
 	
 	public void loadMidi() {
@@ -101,16 +116,13 @@ public class Performance {
 	public void play(boolean bPlayMidi) {
 		bPlaying = true;
 
-//		if (bPlayMidi) {
-//			midi.playMidi();
-//		}
-//	
 		movie_hands.play();
 		movie_face.play();
 		
 		if (bPlayMidi) {
 			movie_hands.volume(0);
 		}
+		movie_face.volume(0);
 	}
 	
 	public void pause() {
