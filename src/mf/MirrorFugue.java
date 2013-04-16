@@ -8,9 +8,9 @@ import content.PerformanceManager;
 
 import processing.core.*;
 import processing.serial.*;
-import warp.CornerPinSurface;
-import warp.Keystone;
+import warp.SurfaceManager;
 import codeanticode.gsvideo.*;
+import controlP5.*;
 
 
 public class MirrorFugue extends PApplet {  
@@ -30,8 +30,9 @@ public class MirrorFugue extends PApplet {
   
   Performance current_performance;
   
-  Keystone key;
-  CornerPinSurface surface_0, surface_1, surface_2;
+  // Surfaces
+  //CornerPinSurface surface_0, surface_1, surface_2;
+  SurfaceManager surfaceMapping;
   PGraphics plane_0, plane_1, plane_2;
   
   int key_mode = 0; // 0 is keys, 1 is organ mode, 2 is disklavier only
@@ -41,6 +42,11 @@ public class MirrorFugue extends PApplet {
   
   //SERIAL
   Serial myPort;
+  
+  //GUI
+  ControlP5 cp5;
+  ControlWindow calibration;
+  RadioButton r;
   
   public void init(){
 	  if(frame!=null){
@@ -61,20 +67,40 @@ public class MirrorFugue extends PApplet {
     noStroke();
     imageMode(CENTER);
     
-    // surface for hands
-//    surface_0 = new CornerPinSurface(this, 600, 170, 5);    
-//    surface_1 = new CornerPinSurface(this, 259, 170, 5);
-//    surface_2 = new CornerPinSurface(this, 354, 170, 5);
-    key = new Keystone(this);
-    surface_0 = key.createCornerPinSurface(600, 170, 5);
-    surface_1 = key.createCornerPinSurface(259, 170, 5);
-    surface_2 = key.createCornerPinSurface(354, 170, 5);
-       
+    // Calibration GUI
+    cp5 = new ControlP5(this);
+    calibration = cp5.addControlWindow("controlP5window", 200, 50, 600, 300).hide()
+    	    .hideCoordinates().setBackground(color(40));
+    r = cp5.addRadioButton("radioButton").moveTo(calibration)
+            .setPosition(60,160)
+            .setSize(20,20)
+            .setColorForeground(color(120))
+            .setColorActive(color(255))
+            .setColorLabel(color(255))
+            .setItemsPerRow(6)
+            .setSpacingColumn(50)
+            .setSpacingRow(20)
+            .addItem("tl0",1)
+            .addItem("tr0",2)
+            .addItem("tl1",3)
+            .addItem("tr1",4)
+            .addItem("tl2",5)
+            .addItem("tr2",6)
+            .addItem("bl0",7)
+            .addItem("br0",8)
+            .addItem("bl1",9)
+            .addItem("br1",10)
+            .addItem("bl2",11)
+            .addItem("br2",12)
+            ;
+  
+    surfaceMapping = new SurfaceManager(this);
+    
     plane_0 = createGraphics(600, 170, P3D);
     plane_1 = createGraphics(259, 170, P3D);
     plane_2 = createGraphics(354, 170, P3D);
 
-    setSurfaces();
+    //setSurfaces();
     clearScreen();
     
     // load performances
@@ -91,52 +117,6 @@ public class MirrorFugue extends PApplet {
 	  rect(0, 500, width, 800);
   }
 
-  private void setSurfaces(){
-	  surface_0.setControlPoints(89, 556,	//TL 
-				461, 556, 		//TR
-				-22, 788, 		//BL
-				443, 788); 		//BR
-	  surface_1.setControlPoints(459, 556,	//TL
-			  616, 555,	//TR
-			  443, 788,	//BL
-			  646, 788);	//BR
-	  surface_2.setControlPoints(616, 555,	//TL
-			   838, 555,	//TR
-			   646, 788,	//BL
-			   922, 788);	//BR
-  }
-  
-//  private void setSurfaces(){
-//	  surface_0.setControlPoints(94, 556,	//TL 
-//				460, 556, 		//TR
-//				-20, 788, 		//BL
-//				444, 788); 		//BR
-//	  surface_1.setControlPoints(460, 556,	//TL
-//			  615, 555,	//TR
-//			  444, 788,	//BL
-//			  644, 788);	//BR
-//	  surface_2.setControlPoints(615, 555,	//TL
-//			   834, 555,	//TR
-//			   644, 788,	//BL
-//			   919, 788);	//BR
-//  }
-  
-  // for old demo of Ravel 2nd movement
-  private void setSurfacesOld() {
-	  surface_0.setControlPoints(89, 556,	//TL 
-			  460, 556, 		//TR
-			  -27, 788, 		//BL
-			  443, 788); 		//BR  
-	  surface_1.setControlPoints(459, 556,	//TL
-			  618, 560,	//TR
-			  443, 788,	//BL
-			  643, 788);	//BR
-	  surface_2.setControlPoints(618, 560,	//TL
-			  840, 560,	//TR
-			  643, 788,	//BL
-			  925, 788);	//BR
-  }
-    
   public void movieEvent(GSMovie movie) {
     movie.read();
   }
@@ -145,7 +125,9 @@ public class MirrorFugue extends PApplet {
 	  if (PerformanceManager.isCurrentlyPlaying()) {
 		  //keys    
 		  if (key_mode == 0)   
-			  PerformanceManager.getCurrentPerformance().drawHandsOnKeys(surface_0, surface_1, surface_2);	
+			  PerformanceManager.getCurrentPerformance().drawHandsOnKeys(surfaceMapping.getSurface(0), 
+					  													surfaceMapping.getSurface(1), 
+					  													surfaceMapping.getSurface(2));	
 		  else if (key_mode == 1)
 			  PerformanceManager.getCurrentPerformance().drawHandOrganMode(this);
 
@@ -173,6 +155,10 @@ public class MirrorFugue extends PApplet {
   
   public void keyPressed() {
 	  println("key pressed: " + keyCode);
+	  if (key == CODED) {
+		  calibrationGUI(keyCode);
+		  return;
+	  }
 	  switch (keyCode) {
 	  	case 32:
 		  if (PerformanceManager.isCurrentlyPlaying()) 
@@ -185,6 +171,7 @@ public class MirrorFugue extends PApplet {
 	  		current_performance.stop();
 	  		clearScreen();
 	  		break;
+	  	
 	
 	  	// SOUND or Disklavier	
 	  	case 96:						
@@ -209,11 +196,40 @@ public class MirrorFugue extends PApplet {
 	  		key_mode = 2;
 	  		clearScreen();
 	  		break;
-	  		
 	  	default:
 	  		if (PerformanceManager.handleKeyPress(keyCode))
 	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 	  		break;
+	  }
+  }
+  
+  private void calibrationGUI(int keyCode) {
+	  if (keyCode == ALT) {
+		  if (calibration.isVisible())
+			  calibration.hide();
+		  else
+			  calibration.show();
+	  
+	  }
+	  if (!surfaceMapping.surfaceSelected())
+		  return;
+	  
+	  if (keyCode == UP) {
+		  surfaceMapping.nudgeSelectedPointY(-1);
+	  } else if (keyCode == DOWN) {
+		  surfaceMapping.nudgeSelectedPointY(1);
+	  } else if (keyCode == LEFT) {
+		  surfaceMapping.nudgeSelectedPointX(-1);
+	  } else if (keyCode == RIGHT) {
+		  surfaceMapping.nudgeSelectedPointX(1);
+	  }
+		  
+  }
+  
+  public void controlEvent(ControlEvent e) {
+	  if (e.isFrom(r)) {
+		  println(e.getGroup().getValue());
+		  surfaceMapping.setSelection((int) e.getGroup().getValue());
 	  }
   }
   

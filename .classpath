@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="libs/serial.jar"/>
 	<classpathentry kind="lib" path="libs/core.jar"/>
 	<classpathentry kind="lib" path="libs/jai_core.jar"/>
+	<classpathentry kind="lib" path="libs/controlP5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -133,6 +133,10 @@ public class PerformanceManager {
 		currentPerformance.pause();
 	}
 	
+	public static void clearMidi() {
+		currentPerformance.pauseMidi();
+	}
+	
 	public static boolean isCurrentlyPlaying() {
 		return currentPerformance.isPlaying();
 	}

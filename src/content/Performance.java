@@ -113,6 +113,10 @@ public class Performance {
 		midi.playMidi();
 	}
 	
+	public void pauseMidi() {
+		midi.pauseMidi();
+	}
+	
 	public void play(boolean bPlayMidi) {
 		bPlaying = true;
 
