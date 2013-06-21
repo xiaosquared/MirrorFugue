@@ -22,7 +22,12 @@ public class PerformanceManager {
 		initMarvin(parent, plane_0, plane_1, plane_2);
 		initDonal(parent, plane_0, plane_1, plane_2);
 		initAlisa(parent, plane_0, plane_1, plane_2);
-		currentPerformance = allPerformances.get("classical dance");
+		initPartita(parent, plane_0, plane_1, plane_2);
+		initNick(parent, plane_0, plane_1, plane_2);
+		initPeter(parent, plane_0, plane_1, plane_2);
+		initJoe(parent, plane_0, plane_1, plane_2);
+		currentPerformance = allPerformances.get("satie");
+		currentPerformance.loadMidi();
 
 		initKeyMappings();
 		
@@ -46,6 +51,10 @@ public class PerformanceManager {
 		String playerFullName = "Xiao Xiao";
 		allPerformances.put("satie", createPerformance(parent, "xx", "Satie_long", playerFullName, "Gnosienne No. 1, Erik Satie", 
 				plane_0, plane_1, plane_2));
+		allPerformances.put("5", createPerformance(parent, "xx", "bagatelle5", playerFullName, "Bagatelle #5, Beethoven", 
+				plane_0, plane_1, plane_2));
+		allPerformances.put("1", createPerformance(parent, "xx", "bagatelle1", playerFullName, "Bagatelle #1, Beethoven", 
+				plane_0, plane_1, plane_2));
 //		allPerformances.put("chopin_all", createPerformance(parent, "xx", "chopin_all", playerFullName, "Étude Op. 25 No. 7, Frédéric Chopin", 
 //				plane_0, plane_1, plane_2));
 //		allPerformances.put("ravel", createPerformance(parent, "xx", "Ravel", playerFullName, "Ravel Sonatine Mvt. 2",
@@ -65,19 +74,21 @@ public class PerformanceManager {
 		String playerFullName = "Donal Fox";
 		allPerformances.put("ugly beauty", createPerformance(parent, "donal", "ub", playerFullName, "Ugly Beauty",
 				plane_0, plane_1, plane_2));
+		allPerformances.put("ugly beauty shortened", createPerformance(parent, "donal", "ub_short", playerFullName, "Ugly Beauty Shortened",
+				plane_0, plane_1, plane_2));
 		allPerformances.put("donal prelude", createPerformance(parent, "donal", "prelude", playerFullName, "Prelude",
 				plane_0, plane_1, plane_2));
-		allPerformances.put("autumn leaves full", createPerformance(parent, "donal", "autumn", playerFullName, "Autumn Leaves",
-				plane_0, plane_1, plane_2));
-		allPerformances.put("autumn leaves tango", createPerformance(parent, "donal", "autumn2", playerFullName, "Autumn Leaves Tango",
-				plane_0, plane_1, plane_2));
+//		allPerformances.put("autumn leaves full", createPerformance(parent, "donal", "autumn", playerFullName, "Autumn Leaves",
+//				plane_0, plane_1, plane_2));
+//		allPerformances.put("autumn leaves tango", createPerformance(parent, "donal", "autumn2", playerFullName, "Autumn Leaves Tango",
+//				plane_0, plane_1, plane_2));
 		allPerformances.put("lyrical", createPerformance(parent, "donal", "lyrical", playerFullName, "Lyrical",
 				plane_0, plane_1, plane_2));
 	}
 	
 	/** Load Marvin */
 	private static void initMarvin(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		allPerformances.put("marvin", createPerformance(parent, "marvin", "marvin", "Marvin Minsky", "Improvised Fugue",
+		allPerformances.put("marvin", createPerformance(parent, "marvin", "marvin_short", "Marvin Minsky", "Improvised Fugue",
 				plane_0, plane_1, plane_2));
 	}
 	
@@ -86,23 +97,61 @@ public class PerformanceManager {
 		String playerFullName = "Alisa Ishii";
 		allPerformances.put("classical dance", createPerformance(parent, "alisa", "dance", playerFullName, "Classical Dance",
 				plane_0, plane_1, plane_2));
-		allPerformances.put("twinkle", createPerformance(parent, "alisa", "twinkle", playerFullName, "Twinkle Twinkle Little Star",
+		allPerformances.put("twinkle", createPerformance(parent, "alisa", "twinkle_short", playerFullName, "Twinkle Twinkle Little Star",
 				plane_0, plane_1, plane_2));
 	}
 	
+	/** Load Partita */
+	private static void initPartita(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String playerFullName = "No Auto Play";
+		allPerformances.put("prelude", createPerformance(parent, "xx_special", "prelude", playerFullName, "Prelude",
+				plane_0, plane_1, plane_2));
+	}
 	
+	/** Load nick joliat */
+	private static void initNick(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String playerFullName = "Nick Joliat";
+		allPerformances.put("waltz", createPerformance(parent, "njoliat", "waltz", playerFullName, "Chopin waltz(?)",
+				plane_0, plane_1, plane_2));
+		allPerformances.put("slow piece", createPerformance(parent, "njoliat", "slow", playerFullName, "Slow Piece",
+				plane_0, plane_1, plane_2));
+		allPerformances.put("lizst", createPerformance(parent, "njoliat", "lizst", playerFullName, "Lizst etude(?)",
+				plane_0, plane_1, plane_2));
+	}
+	private static void initPeter(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		allPerformances.put("blues", createPerformance(parent, "peter", "blues", "Peter Godart", "blues",
+				plane_0, plane_1, plane_2));
+//		allPerformances.put("bebop", createPerformance(parent, "peter", "bebop", "Peter Godart", "bebop",
+//				plane_0, plane_1, plane_2));
+	}
+	private static void initJoe(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		allPerformances.put("joep", createPerformance(parent, "joep", "joep", "No Auto Play", "Improv scales",
+				plane_0, plane_1, plane_2));
+	}
 	
 	public static void initKeyMappings() {
 		keyMappings = new HashMap<Integer, String>();
-		keyMappings.put(new Integer(103), "satie"); 	// 7
-		keyMappings.put(new Integer(104), "marvin"); // 8
-		keyMappings.put(new Integer(105), "twinkle"); // 9
+		keyMappings.put(new Integer(103), "ugly beauty shortened"); 	// 7
+		keyMappings.put(new Integer(104), "twinkle"); // 8
+		keyMappings.put(new Integer(105), "marvin"); // 9
+	
+		
+		keyMappings.put(new Integer(100), "waltz"); // 4
+		keyMappings.put(new Integer(101), "ugly beauty"); // 5
+		keyMappings.put(new Integer(102), "donal prelude"); // 6
+		
+		keyMappings.put(new Integer(99), "blues"); // 3
+		keyMappings.put(new Integer(98), "5"); // 2
+		keyMappings.put(new Integer(97), "1"); // 1
+		
+		keyMappings.put(new Integer(66), "prelude"); // 4
 	}
 	
 	public static boolean handleKeyPress(int key) {
 		String song = keyMappings.get(new Integer(key));
 		if (song != null) {
 			System.out.println(song);
+			currentPerformance.stop(); // stop and reset current performance
 			currentPerformance = allPerformances.get(song);
 			return true;			// if a song was chosen, return true
 		}
@@ -127,6 +176,12 @@ public class PerformanceManager {
 		}
 		
 		currentPerformance.play(bPlayMidi);
+	}
+	
+	public static boolean startNextPerformance() {
+		if (currentPerformance.player.equals("No Auto Play"))
+			return false;
+		return true;
 	}
 	
 	public static void pauseCurrentPerformance() {
@@ -162,6 +217,8 @@ public class PerformanceManager {
 		Object randomValue = values[generator.nextInt(values.length)];
 		
 		currentPerformance = (Performance) randomValue;
+		if (currentPerformance.player.equals("No Auto Play"))
+			setRandomPerformance();
 	}
 
 }

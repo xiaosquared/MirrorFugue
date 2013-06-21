@@ -15,5 +15,37 @@
 	<classpathentry kind="lib" path="libs/core.jar"/>
 	<classpathentry kind="lib" path="libs/jai_core.jar"/>
 	<classpathentry kind="lib" path="libs/controlP5.jar"/>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/jdom-2.0.5-contrib.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MirrorFugue/libs/jdom-2.0.5/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/jdom-2.0.5-javadoc.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MirrorFugue/libs/jdom-2.0.5/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/jdom-2.0.5-junit.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MirrorFugue/libs/jdom-2.0.5/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/jdom-2.0.5-sources.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MirrorFugue/libs/jdom-2.0.5/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/jdom-2.0.5.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MirrorFugue/libs/jdom-2.0.5/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/lib/jaxen-1.1.6.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MirrorFugue/libs/jdom-2.0.5/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="libs/jdom-2.0.5/lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

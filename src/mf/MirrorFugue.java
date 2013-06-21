@@ -3,7 +3,6 @@ package mf;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
-import content.Performance;
 import content.PerformanceManager;
 
 import processing.core.*;
@@ -16,22 +15,7 @@ import controlP5.*;
 public class MirrorFugue extends PApplet {  
   private static final long serialVersionUID = 1L;
 
-  // old demo
-  Performance ravel2, ravel3;
-  
-  // user study
-  Performance ravel, bach, gershwin, improv, satie_long, marvin, chopin, chopin_test, chopin_parts_all;
-  
-  // donal
-  Performance donal_prelude, ugly_beauty, autumn_leaves, autumn_leaves2, lyrical;
-  
-  // alisa
-  Performance alisa_twinkle, alisa_dance;
-  
-  Performance current_performance;
-  
   // Surfaces
-  //CornerPinSurface surface_0, surface_1, surface_2;
   SurfaceManager surfaceMapping;
   PGraphics plane_0, plane_1, plane_2;
   
@@ -39,6 +23,7 @@ public class MirrorFugue extends PApplet {
   boolean bPlayMidi = true; 
   
   boolean bStudy = true;
+  boolean noMotionSensor = false;
   
   //SERIAL
   Serial myPort;
@@ -47,6 +32,8 @@ public class MirrorFugue extends PApplet {
   ControlP5 cp5;
   ControlWindow calibration;
   RadioButton r;
+  
+  PImage bkg;
   
   public void init(){
 	  if(frame!=null){
@@ -66,6 +53,8 @@ public class MirrorFugue extends PApplet {
     fill(0);
     noStroke();
     imageMode(CENTER);
+    
+    bkg = loadImage("bkg.jpg");
     
     // Calibration GUI
     cp5 = new ControlP5(this);
@@ -96,9 +85,12 @@ public class MirrorFugue extends PApplet {
   
     surfaceMapping = new SurfaceManager(this);
     
-    plane_0 = createGraphics(600, 170, P3D);
-    plane_1 = createGraphics(259, 170, P3D);
-    plane_2 = createGraphics(354, 170, P3D);
+//    plane_0 = createGraphics(625, 170, P3D);
+//    plane_1 = createGraphics(259, 170, P3D);
+//    plane_2 = createGraphics(354, 170, P3D);
+    plane_0 = createGraphics(430, 170, P3D);
+    plane_1 = createGraphics(411, 170, P3D);
+	plane_2 = createGraphics(411, 170, P3D);
 
     //setSurfaces();
     clearScreen();
@@ -113,8 +105,11 @@ public class MirrorFugue extends PApplet {
   private void clearScreen() {
 	  fill(0);
 	  rect(0, 0, width, 800);
-	  fill(0);
-	  rect(0, 500, width, 800);
+	  //fill(255);
+	  //rect(0, 500, width, 800);
+	  imageMode(CORNER);
+	  image(bkg, 0, 460);
+	  imageMode(CENTER);
   }
 
   public void movieEvent(GSMovie movie) {
@@ -136,43 +131,54 @@ public class MirrorFugue extends PApplet {
 			  PerformanceManager.getCurrentPerformance().drawFace(this);
 	  } 
 	  
-	  else if (PerformanceManager.isEnded()){
-		  String inBuffer = null;
-		  while(myPort.available() > 0) {
-			  inBuffer = myPort.readStringUntil(95); // code for underscore
-		  }
-		  if (inBuffer != null) {
-			  if (inBuffer.equals("YES_")) {
-				  println("yes");
-				  PerformanceManager.setRandomPerformance();
-				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-			  }
-			  else 
-				  println("no");
-		  }
-	  }
+//	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
+//		  if(noMotionSensor) {
+//		  
+//			  PerformanceManager.setRandomPerformance();
+//			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+//			  return;
+//		  }
+//		  
+//		  String inBuffer = null;
+//		  while(myPort.available() > 0) {
+//			  inBuffer = myPort.readStringUntil(95); // code for underscore
+//		  }
+//		  if (inBuffer != null) {
+//			  if (inBuffer.equals("YES_")) {
+//				  println("yes");
+//				  PerformanceManager.setRandomPerformance();
+//				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+//			  }
+//			  else 
+//				  println("no");
+//		  }
+//	  }
   }
   
   public void keyPressed() {
 	  println("key pressed: " + keyCode);
+	//  fill(0);
+	 //1 rect(0, 500, width, 800);
 	  if (key == CODED) {
 		  calibrationGUI(keyCode);
 		  return;
 	  }
 	  switch (keyCode) {
-	  	case 32:
+	  	case 10:
 		  if (PerformanceManager.isCurrentlyPlaying()) 
 			  PerformanceManager.pauseCurrentPerformance();
-		  else {
+		  else {  
 			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 		  }
 		  break;
-	  	case 109:
-	  		current_performance.stop();
-	  		clearScreen();
-	  		break;
+	  	case 32:
+			  if (PerformanceManager.isCurrentlyPlaying()) 
+				  PerformanceManager.pauseCurrentPerformance();
+			  else {  
+				PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+			  }
+			  break;
 	  	
-	
 	  	// SOUND or Disklavier	
 	  	case 96:						
 	  		bPlayMidi = false;
@@ -196,7 +202,11 @@ public class MirrorFugue extends PApplet {
 	  		key_mode = 2;
 	  		clearScreen();
 	  		break;
+//	  	case 65:
+//	  		noMotionSensor = !noMotionSensor;
+//	  		break;
 	  	default:
+	  		key_mode = 0;
 	  		if (PerformanceManager.handleKeyPress(keyCode))
 	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 	  		break;
@@ -205,8 +215,10 @@ public class MirrorFugue extends PApplet {
   
   private void calibrationGUI(int keyCode) {
 	  if (keyCode == ALT) {
-		  if (calibration.isVisible())
+		  if (calibration.isVisible()) {
 			  calibration.hide();
+			  surfaceMapping.save();
+		  }
 		  else
 			  calibration.show();
 	  
@@ -232,12 +244,7 @@ public class MirrorFugue extends PApplet {
 		  surfaceMapping.setSelection((int) e.getGroup().getValue());
 	  }
   }
-  
-  private void switchPiece (Performance p) {
-	  current_performance.stop();
-	  current_performance = p;
-	  current_performance.loadMidi();
-  }
+ 
   
   public void mousePressed() {
 	  println("mouse: " + mouseX + ", " + mouseY);

@@ -10,29 +10,19 @@ public class SurfaceManager {
 	
 	public SurfaceManager(PApplet parent) {
 		surfaces = new MFSurface[3];
-		
-		MFSurface s0 = new MFSurface(parent, 600, 170, 5, 
-				89, 556,	//TL 
-				461, 556, 		//TR
-				-22, 788, 		//BL
-				443, 788);		//BR
-		
-		MFSurface s1 = new MFSurface(parent, 259, 170, 5, 
-				459, 556,	//TL
-				  616, 555,	//TR
-				  443, 788,	//BL
-				  646, 788);	//BR
-		
-		MFSurface s2 = new MFSurface(parent, 354, 170, 5,
-				616, 555,	//TL
-				   838, 555,	//TR
-				   646, 788,	//BL
-				   922, 788);	//BR
-
-		
+		MFSurface s0 = new MFSurface(parent, 430, 170, 5);
+		MFSurface s1 = new MFSurface(parent, 411, 170, 5);
+		MFSurface s2 = new MFSurface(parent, 411, 170, 5);
 		surfaces[0] = s0;
 		surfaces[1] = s1;
 		surfaces[2] = s2;
+		
+		SurfaceXML.initSurfaces(surfaces);
+
+	}
+	
+	public void save() {
+		SurfaceXML.updateSurfaces(surfaces);
 	}
 	
 	public CornerPinSurface getSurface(int index) {
@@ -60,6 +50,9 @@ public class SurfaceManager {
 			surfaces[selectedSurface].nudgeBLx(amount);
 		else if (selectedPoint == 4)
 			surfaces[selectedSurface].nudgeBRx(amount);
+		
+		System.out.println("Modified Surface " + selectedSurface);
+		surfaces[selectedSurface].printAll();
 	}
 	
 	public void nudgeSelectedPointY(int amount) {
@@ -91,6 +84,26 @@ public class SurfaceManager {
 			selectedPoint = 4;
 	}
 }
+
+// XX office init surface
+//MFSurface s0 = new MFSurface(parent, 600, 170, 5, 
+//		89, 556,	//TL 
+//		461, 556, 		//TR
+//		-22, 788, 		//BL
+//		443, 788);		//BR
+//
+//MFSurface s1 = new MFSurface(parent, 259, 170, 5, 
+//		459, 556,	//TL
+//		  616, 555,	//TR
+//		  443, 788,	//BL
+//		  646, 788);	//BR
+//
+//MFSurface s2 = new MFSurface(parent, 354, 170, 5,
+//		616, 555,	//TL
+//		   838, 555,	//TR
+//		   646, 788,	//BL
+//		   922, 788);	//BR
+
 
 // some old surface coordinates
 

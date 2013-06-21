@@ -19,9 +19,10 @@ public class Performance {
 	// parameters
 	boolean bPlaying = false;
 	boolean bPlayMidi;
+	//float scale_face = 0.336f;
 	float scale_face = 0.336f;
 	float scale_hands = 0.608f;
-	float y_offset = 0.3f;
+	float y_offset = 0.27f;
 	
 	// planes for keyboard
 	PGraphics plane_0;
@@ -78,20 +79,24 @@ public class Performance {
 	
 	public void drawHandsOnKeys(warp.CornerPinSurface s0, warp.CornerPinSurface s1, warp.CornerPinSurface s2) {
 		plane_0.beginDraw();
-		plane_0.image(movie_hands, -53, -105);
+		plane_0.image(movie_hands, -34, -105);
+		//plane_0.image(movie_hands, -53, -105);
 		plane_0.endDraw();
 
 		plane_1.beginDraw();
-		plane_1.image(movie_hands, -651, -105);
+		//plane_1.image(movie_hands, -651, -105);
+		plane_1.image(movie_hands, -455, -105);
 		plane_1.endDraw();
 
 		plane_2.beginDraw();
-		plane_2.image(movie_hands, -910, -105);
+		//plane_2.image(movie_hands, -910, -105);
+		plane_2.image(movie_hands, -863, -105);
 		plane_2.endDraw();
 		
 		s0.render(plane_0);
 		s1.render(plane_1);
 		s2.render(plane_2);
+		
 	}
 	
 	public void drawHandOrganMode(PApplet parent) {

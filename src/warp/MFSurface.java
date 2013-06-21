@@ -17,14 +17,16 @@ public class MFSurface {
 			int xTL, int yTL, int xTR, int yTR, int xBL, int yBL, int xBR, int yBR) {
 		s = new CornerPinSurface(parent, width, height, res);
 		s.setControlPoints(xTL, yTL, xTR, yTR, xBL, yBL, xBR, yBR);
-		
-		setPVectors(xTL, yTL, xTR, yTR, xBL, yBL, xBR, yBR);
 	}
 	
+	public MFSurface(PApplet parent, int width, int height, int res) {
+		s = new CornerPinSurface(parent, width, height, res);
+		s.setControlPoints(0, 0, 0, 0, 0, 0, 0, 0);	
+	}
+
 	public void setControlPoints(int xTL, int yTL, int xTR, int yTR, int xBL, int yBL, int xBR, int yBR) {
 		s.setControlPoints(xTL, yTL, xTR, yTR, xBL, yBL, xBR, yBR);
-		setPVectors(xTL, yTL, xTR, yTR, xBL, yBL, xBR, yBR);
-		
+		setPVectors(xTL, yTL, xTR, yTR, xBL, yBL, xBR, yBR);	
 	}
 	
 	private void setPVectors(int xTL, int yTL, int xTR, int yTR, int xBL, int yBL, int xBR, int yBR) {
@@ -120,5 +122,13 @@ public class MFSurface {
 	
 	public void nudgeBRy(int amount) {
 		setBRy((int)BR.y + amount);
+	}
+	
+	public void printAll() {
+		System.out.println("***SURFACE POINTS***");
+		System.out.println("   TL: " + TL.x + ", " + TL.y);
+		System.out.println("   TR: " + TR.x + ", " + TR.y);
+		System.out.println("   BL: " + BL.x + ", " + BL.y);
+		System.out.println("   BR: " + BR.x + ", " + BR.y);
 	}
 }
