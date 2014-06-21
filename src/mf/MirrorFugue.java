@@ -54,7 +54,7 @@ public class MirrorFugue extends PApplet {
     noStroke();
     imageMode(CENTER);
     
-    bkg = loadImage("bkg.jpg");
+    bkg = loadImage("bkg4.jpg");
     
     // Calibration GUI
     cp5 = new ControlP5(this);
@@ -131,28 +131,27 @@ public class MirrorFugue extends PApplet {
 			  PerformanceManager.getCurrentPerformance().drawFace(this);
 	  } 
 	  
-//	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
-//		  if(noMotionSensor) {
-//		  
-//			  PerformanceManager.setRandomPerformance();
-//			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-//			  return;
-//		  }
-//		  
-//		  String inBuffer = null;
-//		  while(myPort.available() > 0) {
-//			  inBuffer = myPort.readStringUntil(95); // code for underscore
-//		  }
-//		  if (inBuffer != null) {
-//			  if (inBuffer.equals("YES_")) {
-//				  println("yes");
-//				  PerformanceManager.setRandomPerformance();
-//				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-//			  }
-//			  else 
-//				  println("no");
-//		  }
-//	  }
+	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
+		  if(noMotionSensor) {
+			  PerformanceManager.setNextPerformance();
+			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+			  return;
+		  }
+		  
+		  String inBuffer = null;
+		  while(myPort.available() > 0) {
+			  inBuffer = myPort.readStringUntil(95); // code for underscore
+		  }
+		  if (inBuffer != null) {
+			  if (inBuffer.equals("YES_")) {
+				  println("yes");
+				  PerformanceManager.setNextPerformance();
+				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+			  }
+			  else 
+				  println("no");
+		  }
+	  }
   }
   
   public void keyPressed() {
@@ -179,6 +178,17 @@ public class MirrorFugue extends PApplet {
 			  }
 			  break;
 	  	
+	    // Go to next performance
+	  	case 90:
+	  		if (!PerformanceManager.isCurrentlyPlaying())
+	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  		else {
+	  			PerformanceManager.getCurrentPerformance().stop();
+	  			PerformanceManager.setNextPerformance();
+	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  		}
+	  		break;		  
+			  
 	  	// SOUND or Disklavier	
 	  	case 96:						
 	  		bPlayMidi = false;
