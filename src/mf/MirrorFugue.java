@@ -4,6 +4,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import content.PerformanceManager;
+import content.Portrait;
 
 import processing.core.*;
 import processing.serial.*;
@@ -21,12 +22,9 @@ public class MirrorFugue extends PApplet {
   
   int key_mode = 0; // 0 is keys, 1 is organ mode, 2 is disklavier only
   boolean bPlayMidi = true; 
+   
+  Portrait p1, p2, p3, p4; 
   
-  boolean bStudy = true;
-  boolean noMotionSensor = false;
-  
-  //SERIAL
-  Serial myPort;
   
   //GUI
   ControlP5 cp5;
@@ -44,11 +42,11 @@ public class MirrorFugue extends PApplet {
 		  frame.requestFocus();
 	  }
 	  super.init();
-	  println(Serial.list());
   }
   
   public void setup() {
     size(1024, 768, P3D);
+	//size(2560, 768, P3D); 
     background(0);
     fill(0);
     noStroke();
@@ -56,50 +54,52 @@ public class MirrorFugue extends PApplet {
     
     bkg = loadImage("bkg.jpg");
     
-    // Calibration GUI
-    cp5 = new ControlP5(this);
-    calibration = cp5.addControlWindow("controlP5window", 200, 50, 600, 300).hide()
-    	    .hideCoordinates().setBackground(color(40));
-    r = cp5.addRadioButton("radioButton").moveTo(calibration)
-            .setPosition(60,160)
-            .setSize(20,20)
-            .setColorForeground(color(120))
-            .setColorActive(color(255))
-            .setColorLabel(color(255))
-            .setItemsPerRow(6)
-            .setSpacingColumn(50)
-            .setSpacingRow(20)
-            .addItem("tl0",1)
-            .addItem("tr0",2)
-            .addItem("tl1",3)
-            .addItem("tr1",4)
-            .addItem("tl2",5)
-            .addItem("tr2",6)
-            .addItem("bl0",7)
-            .addItem("br0",8)
-            .addItem("bl1",9)
-            .addItem("br1",10)
-            .addItem("bl2",11)
-            .addItem("br2",12)
-            ;
+    initCalibrationGUI();
   
-    surfaceMapping = new SurfaceManager(this);
-    
-//    plane_0 = createGraphics(625, 170, P3D);
-//    plane_1 = createGraphics(259, 170, P3D);
-//    plane_2 = createGraphics(354, 170, P3D);
+    surfaceMapping = new SurfaceManager(this);    
     plane_0 = createGraphics(430, 170, P3D);
     plane_1 = createGraphics(411, 170, P3D);
 	plane_2 = createGraphics(411, 170, P3D);
 
-    //setSurfaces();
     clearScreen();
     
     // load performances
     PerformanceManager.initPerformances(this, plane_0, plane_1, plane_2);
-     
-    //Serial
-    myPort = new Serial(this, Serial.list()[0], 9600);
+    
+    // Portraits
+    p1 = new Portrait("Allen Toussaint", new GSMovie(this, "ryuichi/colors_face.mov"), 1024, 200);
+    p2 = new Portrait("Jon Cleary", new GSMovie(this, "marvin/marvin_face.mov"), 1500, 200);
+    p3 = new Portrait("Nick Sanders", new GSMovie(this, "vijay/vijay_face.mov"), 2000, 200);
+
+  }
+  
+  private void initCalibrationGUI(){
+	  // Calibration GUI
+	  cp5 = new ControlP5(this);
+	  calibration = cp5.addControlWindow("controlP5window", 200, 50, 600, 300).hide()
+			  .hideCoordinates().setBackground(color(40));
+	  r = cp5.addRadioButton("radioButton").moveTo(calibration)
+			  .setPosition(60,160)
+			  .setSize(20,20)
+			  .setColorForeground(color(120))
+			  .setColorActive(color(255))
+			  .setColorLabel(color(255))
+			  .setItemsPerRow(6)
+			  .setSpacingColumn(50)
+			  .setSpacingRow(20)
+			  .addItem("tl0",1)
+			  .addItem("tr0",2)
+			  .addItem("tl1",3)
+			  .addItem("tr1",4)
+			  .addItem("tl2",5)
+			  .addItem("tr2",6)
+			  .addItem("bl0",7)
+			  .addItem("br0",8)
+			  .addItem("bl1",9)
+			  .addItem("br1",10)
+			  .addItem("bl2",11)
+			  .addItem("br2",12)
+			  ;
   }
   
   private void clearScreen() {
@@ -119,40 +119,14 @@ public class MirrorFugue extends PApplet {
   public void draw() {
 	  if (PerformanceManager.isCurrentlyPlaying()) {
 		  //keys    
-		  if (key_mode == 0)   
-			  PerformanceManager.getCurrentPerformance().drawHandsOnKeys(surfaceMapping.getSurface(0), 
-					  													surfaceMapping.getSurface(1), 
-					  													surfaceMapping.getSurface(2));	
-		  else if (key_mode == 1)
-			  PerformanceManager.getCurrentPerformance().drawHandOrganMode(this);
-
-		  // face
-		  if (key_mode != 2)
-			  PerformanceManager.getCurrentPerformance().drawFace(this);
-	  } 
+		  PerformanceManager.getCurrentPerformance().drawHandsOnKeys(surfaceMapping.getSurface(0), surfaceMapping.getSurface(1), surfaceMapping.getSurface(2));	
+		  PerformanceManager.getCurrentPerformance().drawFace(this);
 	  
-//	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
-//		  if(noMotionSensor) {
-//		  
-//			  PerformanceManager.setRandomPerformance();
-//			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-//			  return;
-//		  }
-//		  
-//		  String inBuffer = null;
-//		  while(myPort.available() > 0) {
-//			  inBuffer = myPort.readStringUntil(95); // code for underscore
-//		  }
-//		  if (inBuffer != null) {
-//			  if (inBuffer.equals("YES_")) {
-//				  println("yes");
-//				  PerformanceManager.setRandomPerformance();
-//				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-//			  }
-//			  else 
-//				  println("no");
-//		  }
-//	  }
+		  p1.draw(this);
+		  p2.draw(this);
+		  p3.draw(this);
+	  }
+	  
   }
   
   public void keyPressed() {
@@ -202,13 +176,13 @@ public class MirrorFugue extends PApplet {
 	  		key_mode = 2;
 	  		clearScreen();
 	  		break;
-//	  	case 65:
-//	  		noMotionSensor = !noMotionSensor;
-//	  		break;
 	  	default:
 	  		key_mode = 0;
 	  		if (PerformanceManager.handleKeyPress(keyCode))
 	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  		//	p1.play();
+	  		//	p2.play();
+	  		//	p3.play();
 	  		break;
 	  }
   }

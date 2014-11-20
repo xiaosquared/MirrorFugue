@@ -71,7 +71,7 @@ public class Performance {
 	
 	public void drawFace(PApplet parent) {
 		parent.pushMatrix();
-			parent.translate(parent.width * 0.48f, parent.height * y_offset);
+			parent.translate(1024 * 0.48f, parent.height * y_offset);
 			parent.scale(-scale_face, scale_face);
 			parent.image(movie_face, 0,0);
 		parent.popMatrix();
