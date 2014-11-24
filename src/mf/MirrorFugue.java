@@ -5,6 +5,7 @@ import java.awt.GraphicsEnvironment;
 
 import content.PerformanceManager;
 import content.Portrait;
+import content.PortraitManager;
 
 import processing.core.*;
 import processing.serial.*;
@@ -22,9 +23,6 @@ public class MirrorFugue extends PApplet {
   
   int key_mode = 0; // 0 is keys, 1 is organ mode, 2 is disklavier only
   boolean bPlayMidi = true; 
-   
-  Portrait p1, p2, p3, p4; 
-  
   
   //GUI
   ControlP5 cp5;
@@ -32,6 +30,10 @@ public class MirrorFugue extends PApplet {
   RadioButton r;
   
   PImage bkg;
+  
+  //TEST
+  boolean test_cue = false;
+  boolean test_cue2 = false;
   
   public void init(){
 	  if(frame!=null){
@@ -45,8 +47,8 @@ public class MirrorFugue extends PApplet {
   }
   
   public void setup() {
-    size(1024, 768, P3D);
-	//size(2560, 768, P3D); 
+    //size(1024, 768, P3D);
+	size(2560, 768, P3D); 
     background(0);
     fill(0);
     noStroke();
@@ -66,11 +68,11 @@ public class MirrorFugue extends PApplet {
     // load performances
     PerformanceManager.initPerformances(this, plane_0, plane_1, plane_2);
     
-    // Portraits
-    p1 = new Portrait("Allen Toussaint", new GSMovie(this, "ryuichi/colors_face.mov"), 1024, 200);
-    p2 = new Portrait("Jon Cleary", new GSMovie(this, "marvin/marvin_face.mov"), 1500, 200);
-    p3 = new Portrait("Nick Sanders", new GSMovie(this, "vijay/vijay_face.mov"), 2000, 200);
+    // load portraits
+    PortraitManager.initPortraits(this);
 
+    PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+    PortraitManager.startPortraits();
   }
   
   private void initCalibrationGUI(){
@@ -117,14 +119,23 @@ public class MirrorFugue extends PApplet {
   }
 
   public void draw() {
+	  PortraitManager.drawPortraits(this);
+
 	  if (PerformanceManager.isCurrentlyPlaying()) {
-		  //keys    
 		  PerformanceManager.getCurrentPerformance().drawHandsOnKeys(surfaceMapping.getSurface(0), surfaceMapping.getSurface(1), surfaceMapping.getSurface(2));	
 		  PerformanceManager.getCurrentPerformance().drawFace(this);
+	  } 
 	  
-		  p1.draw(this);
-		  p2.draw(this);
-		  p3.draw(this);
+	  // when a performance is done, new player walks in, old player walks off
+	  else if (PerformanceManager.isEnded() && !PortraitManager.transitionedPlayer) {
+		  println("A performance just ended");
+		  PortraitManager.transitionPlayer();
+		  PerformanceManager.setNextPerformance();
+	  } 
+	  
+	  else if (!PortraitManager.playerReadied && PortraitManager.nextPlayerReady()) {
+		  println("Next Performance Ready");
+		  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 	  }
 	  
   }
@@ -180,9 +191,8 @@ public class MirrorFugue extends PApplet {
 	  		key_mode = 0;
 	  		if (PerformanceManager.handleKeyPress(keyCode))
 	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-	  		//	p1.play();
-	  		//	p2.play();
-	  		//	p3.play();
+	  		
+
 	  		break;
 	  }
   }

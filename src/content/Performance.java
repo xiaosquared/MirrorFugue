@@ -57,7 +57,9 @@ public class Performance {
 	}
 	
 	public boolean isEnded() {
-		return (Math.abs(movie_face.time() - movie_face.duration()) <= 0.01);
+		double diff = Math.abs(movie_face.time() - movie_face.duration());
+	
+		return diff <= 0.004;
 	}
 	
 	public boolean isPaused() {

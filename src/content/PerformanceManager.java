@@ -1,5 +1,6 @@
 package content;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -13,13 +14,17 @@ public class PerformanceManager {
 	static HashMap<String, Performance> allPerformances;
 	static HashMap<Integer, String> keyMappings;
 	
+	static ArrayList<Performance> playlist;
+	static int playlist_index = 0;
+	
 	static final int midi_delay = 400;
 	
 	public static void initPerformances(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
 		allPerformances = new HashMap<String, Performance>();
+		playlist = new ArrayList<Performance>();
 		
 		initNOLA(parent, plane_0, plane_1, plane_2);
-		currentPerformance = allPerformances.get("toussaint");
+		currentPerformance = allPerformances.get("AT");
 		currentPerformance.loadMidi();
 
 		initKeyMappings();
@@ -40,28 +45,35 @@ public class PerformanceManager {
 	}
 	
 	private static void initNOLA(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		allPerformances.put("toussaint", createPerformance(parent, "nola", "AT", "Allen Toussaint", "Southern Nights", 
+		allPerformances.put("AT", createPerformance(parent, "nola", "AT2", "AT", "Second piece", 
 				plane_0, plane_1, plane_2));
+		allPerformances.put("JC", createPerformance(parent, "nola", "JC2", "JC", "Tipitina", 
+				plane_0, plane_1, plane_2));
+		allPerformances.put("RM", createPerformance(parent, "nola", "RM", "RM", "Groove", 
+				plane_0, plane_1, plane_2));
+		allPerformances.put("NS", createPerformance(parent, "nola", "NS2", "NS", "Simple", 
+				plane_0, plane_1, plane_2));
+		
+		playlist.add(allPerformances.get("AT"));
+		playlist.add(allPerformances.get("JC"));
+		//playlist.add(allPerformances.get("RM"));
+		//playlist.add(allPerformances.get("NS"));
+
+		// for testing only
 		allPerformances.put("satie", createPerformance(parent, "xx", "satie", "xiao xiao", "Gnosienne", 
 				plane_0, plane_1, plane_2));
 	}
 		
 	public static void initKeyMappings() {
 		keyMappings = new HashMap<Integer, String>();
-		keyMappings.put(new Integer(103), "ugly beauty shortened"); 	// 7
-		keyMappings.put(new Integer(104), "twinkle"); // 8
-		keyMappings.put(new Integer(105), "marvin"); // 9
-	
-		
-		keyMappings.put(new Integer(100), "toussaint"); // 4
+
 		keyMappings.put(new Integer(101), "satie"); // 5
-		keyMappings.put(new Integer(102), "donal prelude"); // 6
 		
-		keyMappings.put(new Integer(99), "blues"); // 3
-		keyMappings.put(new Integer(98), "5"); // 2
-		keyMappings.put(new Integer(97), "1"); // 1
+		keyMappings.put(new Integer(100), "NS"); // 4
+		keyMappings.put(new Integer(99), "RM"); // 3
+		keyMappings.put(new Integer(98), "JC"); // 2
+		keyMappings.put(new Integer(97), "AT"); // 1
 		
-		keyMappings.put(new Integer(66), "prelude"); // 4
 	}
 	
 	public static boolean handleKeyPress(int key) {
@@ -123,6 +135,17 @@ public class PerformanceManager {
 	
 	public static Performance getCurrentPerformance() {
 		return currentPerformance;
+	}
+	
+	public static Performance getNextPerformance() {
+		return playlist.get((playlist_index + 1) % playlist.size());
+	}
+	
+	public static void setNextPerformance() {
+		playlist_index ++;
+		if (playlist_index == playlist.size())
+			playlist_index = 0;
+		currentPerformance = playlist.get(playlist_index);	
 	}
 	
 	/**
