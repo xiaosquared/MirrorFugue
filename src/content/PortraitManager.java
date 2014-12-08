@@ -3,6 +3,8 @@ package content;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import mf.MirrorFugue;
+
 import codeanticode.gsvideo.GSMovie;
 
 import processing.core.PApplet;
@@ -13,12 +15,28 @@ public class PortraitManager {
 	public static boolean transitionedPlayer = false;
 	public static boolean playerReadied = false;
 	
-	public static void initPortraits(PApplet parent) {
+	static int pX, pY, pWidth;
+	
+	public static void initPortraits(MirrorFugue parent) {
 		portraits = new HashMap<String, Portrait>();
-		
-		portraits.put("AT", new Portrait("AT", new GSMovie(parent, "nola/Portraits/Toussaint sitting.mov"), new GSMovie(parent, "nola/Portraits/Toussaint exit.mov"), 1200, 200));
-		portraits.put("JC", new Portrait("JC", new GSMovie(parent, "nola/Portraits/Cleary sitting.mov"), new GSMovie(parent, "nola/Portraits/Cleary exit.mov"), 1600, 200));
-		
+				
+		pWidth = 426;	
+		pX = 1024 + pWidth*2;
+		pY = 68;
+
+		portraits.put("AT", new Portrait("AT", 	new GSMovie(parent, "nola/Portraits/240 AT init.mov"),
+												new GSMovie(parent, "nola/Portraits/240 AT sitting.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 AT exit.mov"), 945+1024, pY));
+		portraits.put("JC", new Portrait("JC", 	new GSMovie(parent, "nola/Portraits/240 JC init.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 JC sitting.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 JC exit.mov"), 1374+1024, pY));
+		portraits.put("RM", new Portrait("RM", 	new GSMovie(parent, "nola/Portraits/240 RM init.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 RM init.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 RM exit.mov"), 1800+1024, pY));
+		portraits.put("NS", new Portrait("NS", 	new GSMovie(parent, "nola/Portraits/240 NS init.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 NS sitting.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 NS exit.mov"), 2225+1024, pY));
+
 		System.out.println("Done loading portraits!");
 	}
 	
@@ -27,10 +45,14 @@ public class PortraitManager {
 	    while (it.hasNext()) {
 	        it.next().draw(parent);
 	    }
+
 	}
 	
 	public static void startPortraits() {
-		portraits.get("JC").playSitting();
+		portraits.get("AT").playSittingInit();
+		portraits.get("JC").playSittingInit();
+		portraits.get("RM").playSittingInit();
+		portraits.get("NS").playSittingInit();
 	}
 	
 	public static void transitionPlayer() {

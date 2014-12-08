@@ -1,14 +1,11 @@
 package mf;
 
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import content.PerformanceManager;
-import content.Portrait;
 import content.PortraitManager;
 
 import processing.core.*;
-import processing.serial.*;
 import warp.SurfaceManager;
 import codeanticode.gsvideo.*;
 import controlP5.*;
@@ -21,7 +18,6 @@ public class MirrorFugue extends PApplet {
   SurfaceManager surfaceMapping;
   PGraphics plane_0, plane_1, plane_2;
   
-  int key_mode = 0; // 0 is keys, 1 is organ mode, 2 is disklavier only
   boolean bPlayMidi = true; 
   
   //GUI
@@ -30,10 +26,13 @@ public class MirrorFugue extends PApplet {
   RadioButton r;
   
   PImage bkg;
+  PImage info;
   
-  //TEST
-  boolean test_cue = false;
-  boolean test_cue2 = false;
+  //Start flag
+  boolean started = false;
+  
+  //number of displays
+  int displays =1;
   
   public void init(){
 	  if(frame!=null){
@@ -44,17 +43,25 @@ public class MirrorFugue extends PApplet {
 		  frame.requestFocus();
 	  }
 	  super.init();
+	  
+	  GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	  displays = environment.getScreenDevices().length;
+	  println("number of displays " + displays);
   }
   
   public void setup() {
-    //size(1024, 768, P3D);
-	size(2560, 768, P3D); 
-    background(0);
+	if (displays <= 2)  
+		size(3584, 768, P3D); 
+	else if (displays == 3)
+		size(4864, 1080, P3D);
+	
+	background(0);
     fill(0);
     noStroke();
     imageMode(CENTER);
     
     bkg = loadImage("bkg.jpg");
+    info = loadImage("nola/wall info blank.jpg");
     
     initCalibrationGUI();
   
@@ -63,7 +70,7 @@ public class MirrorFugue extends PApplet {
     plane_1 = createGraphics(411, 170, P3D);
 	plane_2 = createGraphics(411, 170, P3D);
 
-    clearScreen();
+	//clearScreen();
     
     // load performances
     PerformanceManager.initPerformances(this, plane_0, plane_1, plane_2);
@@ -71,8 +78,7 @@ public class MirrorFugue extends PApplet {
     // load portraits
     PortraitManager.initPortraits(this);
 
-    PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-    PortraitManager.startPortraits();
+    drawText();
   }
   
   private void initCalibrationGUI(){
@@ -104,6 +110,12 @@ public class MirrorFugue extends PApplet {
 			  ;
   }
   
+  private void drawText() {
+	  imageMode(CORNER);
+	  image(info, 1024, 0);
+	  imageMode(CENTER);
+  }
+  
   private void clearScreen() {
 	  fill(0);
 	  rect(0, 0, width, 800);
@@ -114,11 +126,18 @@ public class MirrorFugue extends PApplet {
 	  imageMode(CENTER);
   }
 
+  public int howManyDisplays() {
+	  return displays;
+  }
+  
   public void movieEvent(GSMovie movie) {
     movie.read();
   }
 
   public void draw() {
+	  if (!started)
+		  return;
+	  
 	  PortraitManager.drawPortraits(this);
 
 	  if (PerformanceManager.isCurrentlyPlaying()) {
@@ -157,13 +176,18 @@ public class MirrorFugue extends PApplet {
 		  }
 		  break;
 	  	case 32:
-			  if (PerformanceManager.isCurrentlyPlaying()) 
-				  PerformanceManager.pauseCurrentPerformance();
-			  else {  
-				PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-			  }
-			  break;
-	  	
+	  		  if (!started) {
+	  			  started = true;
+	  			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  			  PortraitManager.startPortraits();
+	  		  } else{
+	  			  if (PerformanceManager.isCurrentlyPlaying()) 
+	  				  PerformanceManager.pauseCurrentPerformance();
+	  			  else {  
+	  				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  			  }
+	  		  }
+			  break;	  
 	  	// SOUND or Disklavier	
 	  	case 96:						
 	  		bPlayMidi = false;
@@ -171,24 +195,9 @@ public class MirrorFugue extends PApplet {
 	  	case 110:
 	  		bPlayMidi = true;
 	  		break;
-	  	
-	  	// ON KEYS OR ABOVE
-	  	case 8:				// draw on keys
-	  		key_mode = 0;
-	  		fill(0);
-	  		rect(0, 0, width, height);
-	  		break;
-	  	case 106:				// organ mode
-	  		key_mode = 1;
-	  		fill(0);
-	  		rect(0, 0, width, height);
-	  		break;
-	  	case 111:				// only disklavier
-	  		key_mode = 2;
-	  		clearScreen();
-	  		break;
 	  	default:
-	  		key_mode = 0;
+	  		if (!started)
+	  			return;
 	  		if (PerformanceManager.handleKeyPress(keyCode))
 	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 	  		
@@ -236,21 +245,13 @@ public class MirrorFugue extends PApplet {
   
   public static void main(String args[]) {
 	/* 
-	 * places window on second screen automatically if there's additional display
+	 * piano projector is first screen. floor projectors are screens 2 and 3.
 	 * 
 	 */
-	int primary_width;
-	int screen_y = 0;
+	int projector_width = 1024;
 	
-	GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	GraphicsDevice devices[] = environment.getScreenDevices();
 	String location;
-	if (devices.length > 1) {
-		primary_width = devices[0].getDisplayMode().getWidth();
-		location = "--location=" +primary_width+ "," + screen_y;
-	} else {
-		location="--location=0,0";
-	}
+	location="--location=-" + projector_width + ",0";
     PApplet.main(new String[] { location, MirrorFugue.class.getName() });
   }
 

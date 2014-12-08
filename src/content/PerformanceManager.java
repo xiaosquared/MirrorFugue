@@ -56,8 +56,8 @@ public class PerformanceManager {
 		
 		playlist.add(allPerformances.get("AT"));
 		playlist.add(allPerformances.get("JC"));
-		//playlist.add(allPerformances.get("RM"));
-		//playlist.add(allPerformances.get("NS"));
+		playlist.add(allPerformances.get("RM"));
+		playlist.add(allPerformances.get("NS"));
 
 		// for testing only
 		allPerformances.put("satie", createPerformance(parent, "xx", "satie", "xiao xiao", "Gnosienne", 
