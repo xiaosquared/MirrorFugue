@@ -19,10 +19,12 @@ public class Performance {
 	// parameters
 	boolean bPlaying = false;
 	boolean bPlayMidi;
-	//float scale_face = 0.336f;
-	float scale_face = 0.336f;
+	//float scale_face = 0.270f;
+	float scale_face = 0.32f;
 	float scale_hands = 0.608f;
-	float y_offset = 0.27f;
+	//float y_offset = 0.27f;
+	float y_offset = 0.25f;
+	float x_offset = 0.46f;
 	
 	// planes for keyboard
 	PGraphics plane_0;
@@ -71,7 +73,7 @@ public class Performance {
 	
 	public void drawFace(PApplet parent) {
 		parent.pushMatrix();
-			parent.translate(parent.width * 0.48f, parent.height * y_offset);
+			parent.translate(parent.width * x_offset, parent.height * y_offset);
 			parent.scale(-scale_face, scale_face);
 			parent.image(movie_face, 0,0);
 		parent.popMatrix();

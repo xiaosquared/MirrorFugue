@@ -1,5 +1,6 @@
 package content;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -13,20 +14,23 @@ public class PerformanceManager {
 	static HashMap<String, Performance> allPerformances;
 	static HashMap<Integer, String> keyMappings;
 	
+	static ArrayList<PianistPlaylist> playlist;
+	static int playlistIndex = -1;
+	
 	static final int midi_delay = 400;
 	
 	public static void initPerformances(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
 		allPerformances = new HashMap<String, Performance>();
+		playlist = new ArrayList<PianistPlaylist>();
 		
 		initXX(parent, plane_0, plane_1, plane_2);
-		initMarvin(parent, plane_0, plane_1, plane_2);
 		initDonal(parent, plane_0, plane_1, plane_2);
+		initRyuichi(parent, plane_0, plane_1, plane_2);
+		initMarvin(parent, plane_0, plane_1, plane_2);
 		initAlisa(parent, plane_0, plane_1, plane_2);
-		initPartita(parent, plane_0, plane_1, plane_2);
-		initNick(parent, plane_0, plane_1, plane_2);
-		initPeter(parent, plane_0, plane_1, plane_2);
-		initJoe(parent, plane_0, plane_1, plane_2);
-		currentPerformance = allPerformances.get("satie");
+		initVijay(parent, plane_0, plane_1, plane_2);
+		
+		setNextPerformance();
 		currentPerformance.loadMidi();
 
 		initKeyMappings();
@@ -49,24 +53,25 @@ public class PerformanceManager {
 	/** Load performances by me! */
 	private static void initXX(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
 		String playerFullName = "Xiao Xiao";
-		allPerformances.put("satie", createPerformance(parent, "xx", "Satie_long", playerFullName, "Gnosienne No. 1, Erik Satie", 
+		allPerformances.put("satie", createPerformance(parent, "xx", "Satie", playerFullName, "Gnosienne No. 1, Erik Satie", 
 				plane_0, plane_1, plane_2));
 		allPerformances.put("5", createPerformance(parent, "xx", "bagatelle5", playerFullName, "Bagatelle #5, Beethoven", 
 				plane_0, plane_1, plane_2));
-		allPerformances.put("1", createPerformance(parent, "xx", "bagatelle1", playerFullName, "Bagatelle #1, Beethoven", 
+		allPerformances.put("mv2", createPerformance(parent, "xx", "mv2", playerFullName, "Ravel", 
 				plane_0, plane_1, plane_2));
-//		allPerformances.put("chopin_all", createPerformance(parent, "xx", "chopin_all", playerFullName, "Étude Op. 25 No. 7, Frédéric Chopin", 
-//				plane_0, plane_1, plane_2));
-//		allPerformances.put("ravel", createPerformance(parent, "xx", "Ravel", playerFullName, "Ravel Sonatine Mvt. 2",
-//				plane_0, plane_1, plane_2));
-//		allPerformances.put("improv", createPerformance(parent, "xx", "Improv", playerFullName, "Improvisation",
-//				plane_0, plane_1, plane_2));
-//		allPerformances.put("gershwin", createPerformance(parent, "xx", "Gershwin", playerFullName, "Prelude No. 3",
-//				plane_0, plane_1, plane_2));
-//		allPerformances.put("chopin_g", createPerformance(parent, "xx", "Chopin", playerFullName, "Prelude in G minor",
-//				plane_0, plane_1, plane_2));
-//		allPerformances.put("bach_invention", createPerformance(parent, "xx", "Bach", playerFullName, "Invention No. 14",
-//				plane_0, plane_1, plane_2));
+
+		PianistPlaylist xx = new PianistPlaylist();
+		xx.addPerformance(allPerformances.get("satie"));
+		xx.addPerformance(allPerformances.get("5"));
+		
+		playlist.add(xx);
+	}
+	
+	/** Load performances by vijay */
+	private static void initVijay(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String playerFullName = "Vijay Iyer";
+		allPerformances.put("vijay", createPerformance(parent, "vijay", "vijay", playerFullName, "jazz", 
+				plane_0, plane_1, plane_2));
 	}
 	
 	/** Load performances by Donal */
@@ -74,22 +79,24 @@ public class PerformanceManager {
 		String playerFullName = "Donal Fox";
 		allPerformances.put("ugly beauty", createPerformance(parent, "donal", "ub", playerFullName, "Ugly Beauty",
 				plane_0, plane_1, plane_2));
-		allPerformances.put("ugly beauty shortened", createPerformance(parent, "donal", "ub_short", playerFullName, "Ugly Beauty Shortened",
+		allPerformances.put("prelude", createPerformance(parent, "donal", "prelude", playerFullName, "Prelude",
 				plane_0, plane_1, plane_2));
-		allPerformances.put("donal prelude", createPerformance(parent, "donal", "prelude", playerFullName, "Prelude",
+		allPerformances.put("autumn leaves", createPerformance(parent, "donal", "autumn2", playerFullName, "Autumn Leaves",
 				plane_0, plane_1, plane_2));
-//		allPerformances.put("autumn leaves full", createPerformance(parent, "donal", "autumn", playerFullName, "Autumn Leaves",
-//				plane_0, plane_1, plane_2));
-//		allPerformances.put("autumn leaves tango", createPerformance(parent, "donal", "autumn2", playerFullName, "Autumn Leaves Tango",
-//				plane_0, plane_1, plane_2));
 		allPerformances.put("lyrical", createPerformance(parent, "donal", "lyrical", playerFullName, "Lyrical",
 				plane_0, plane_1, plane_2));
-	}
-	
-	/** Load Marvin */
-	private static void initMarvin(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		allPerformances.put("marvin", createPerformance(parent, "marvin", "marvin_short", "Marvin Minsky", "Improvised Fugue",
+		
+		allPerformances.put("finale", createPerformance(parent, "donal", "finale2", playerFullName, "finale", 
 				plane_0, plane_1, plane_2));
+		
+		
+		PianistPlaylist donal = new PianistPlaylist();
+		//donal.addPerformance(allPerformances.get("prelude"));
+		//donal.addPerformance(allPerformances.get("ugly beauty"));
+		//donal.addPerformance(allPerformances.get("autumn leaves"));
+		donal.addPerformance(allPerformances.get("lyrical"));
+		
+		playlist.add(donal);
 	}
 	
 	/** Load Alisa */
@@ -97,54 +104,54 @@ public class PerformanceManager {
 		String playerFullName = "Alisa Ishii";
 		allPerformances.put("classical dance", createPerformance(parent, "alisa", "dance", playerFullName, "Classical Dance",
 				plane_0, plane_1, plane_2));
-		allPerformances.put("twinkle", createPerformance(parent, "alisa", "twinkle_short", playerFullName, "Twinkle Twinkle Little Star",
+		allPerformances.put("twinkle", createPerformance(parent, "alisa", "twinkle", playerFullName, "Twinkle Twinkle Little Star",
 				plane_0, plane_1, plane_2));
+
+		PianistPlaylist alisa = new PianistPlaylist();
+		alisa.addPerformance(allPerformances.get("classical dance"));
+		alisa.addPerformance(allPerformances.get("twinkle"));
+		
+		playlist.add(alisa);
 	}
 	
-	/** Load Partita */
-	private static void initPartita(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		String playerFullName = "No Auto Play";
-		allPerformances.put("prelude", createPerformance(parent, "xx_special", "prelude", playerFullName, "Prelude",
+	/** Load Ryuichi */
+	private static void initRyuichi(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String playerFullName = "Ryuichi Sakamoto";
+		allPerformances.put("improv", createPerformance(parent, "ryuichi", "improv", playerFullName, "Improv",
 				plane_0, plane_1, plane_2));
+		allPerformances.put("colors", createPerformance(parent, "ryuichi", "colors", playerFullName, "Improv",
+				plane_0, plane_1, plane_2));
+		PianistPlaylist ryuichi = new PianistPlaylist();
+		ryuichi.addPerformance(allPerformances.get("improv"));
+		
+		playlist.add(ryuichi);
 	}
 	
-	/** Load nick joliat */
-	private static void initNick(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		String playerFullName = "Nick Joliat";
-		allPerformances.put("waltz", createPerformance(parent, "njoliat", "waltz", playerFullName, "Chopin waltz(?)",
+	/** Load Marvin */
+	private static void initMarvin(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		allPerformances.put("marvin", createPerformance(parent, "marvin", "marvin", "Marvin Minsky", "Improvised Fugue",
 				plane_0, plane_1, plane_2));
-		allPerformances.put("slow piece", createPerformance(parent, "njoliat", "slow", playerFullName, "Slow Piece",
-				plane_0, plane_1, plane_2));
-		allPerformances.put("lizst", createPerformance(parent, "njoliat", "lizst", playerFullName, "Lizst etude(?)",
-				plane_0, plane_1, plane_2));
-	}
-	private static void initPeter(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		allPerformances.put("blues", createPerformance(parent, "peter", "blues", "Peter Godart", "blues",
-				plane_0, plane_1, plane_2));
-//		allPerformances.put("bebop", createPerformance(parent, "peter", "bebop", "Peter Godart", "bebop",
-//				plane_0, plane_1, plane_2));
-	}
-	private static void initJoe(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		allPerformances.put("joep", createPerformance(parent, "joep", "joep", "No Auto Play", "Improv scales",
-				plane_0, plane_1, plane_2));
+		
+		PianistPlaylist marvin = new PianistPlaylist();
+		marvin.addPerformance(allPerformances.get("marvin"));
+		
+		playlist.add(marvin);
 	}
 	
 	public static void initKeyMappings() {
 		keyMappings = new HashMap<Integer, String>();
-		keyMappings.put(new Integer(103), "ugly beauty shortened"); 	// 7
+		keyMappings.put(new Integer(103), "ugly beauty"); 	// 7
 		keyMappings.put(new Integer(104), "twinkle"); // 8
 		keyMappings.put(new Integer(105), "marvin"); // 9
 	
 		
-		keyMappings.put(new Integer(100), "waltz"); // 4
-		keyMappings.put(new Integer(101), "ugly beauty"); // 5
-		keyMappings.put(new Integer(102), "donal prelude"); // 6
+		keyMappings.put(new Integer(100), "satie"); // 4
+		keyMappings.put(new Integer(101), "colors"); // 5
+		keyMappings.put(new Integer(102), "vijay"); // 6
 		
-		keyMappings.put(new Integer(99), "blues"); // 3
-		keyMappings.put(new Integer(98), "5"); // 2
-		keyMappings.put(new Integer(97), "1"); // 1
-		
-		keyMappings.put(new Integer(66), "prelude"); // 4
+		keyMappings.put(new Integer(99), "lyrical"); // 3
+		keyMappings.put(new Integer(98), "finale"); // 2
+		keyMappings.put(new Integer(97), "improv"); // 1
 	}
 	
 	public static boolean handleKeyPress(int key) {
@@ -206,6 +213,15 @@ public class PerformanceManager {
 	
 	public static Performance getCurrentPerformance() {
 		return currentPerformance;
+	}
+
+	public static void setNextPerformance() {
+		if (playlistIndex < (playlist.size()-1))
+			playlistIndex ++;
+		else
+			playlistIndex = 0;
+		
+		currentPerformance = playlist.get(playlistIndex).getNextPerformance();
 	}
 	
 	/**

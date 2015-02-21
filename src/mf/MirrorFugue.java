@@ -23,7 +23,7 @@ public class MirrorFugue extends PApplet {
   boolean bPlayMidi = true; 
   
   boolean bStudy = true;
-  boolean noMotionSensor = false;
+  boolean noMotionSensor = true;
   
   //SERIAL
   Serial myPort;
@@ -49,12 +49,13 @@ public class MirrorFugue extends PApplet {
   
   public void setup() {
     size(1024, 768, P3D);
-    background(0);
+    //size(1280, 1024, P3D);
+	  background(0);
     fill(0);
     noStroke();
     imageMode(CENTER);
     
-    bkg = loadImage("bkg.jpg");
+    bkg = loadImage("bkg4.jpg");
     
     // Calibration GUI
     cp5 = new ControlP5(this);
@@ -97,9 +98,6 @@ public class MirrorFugue extends PApplet {
     
     // load performances
     PerformanceManager.initPerformances(this, plane_0, plane_1, plane_2);
-     
-    //Serial
-    myPort = new Serial(this, Serial.list()[0], 9600);
   }
   
   private void clearScreen() {
@@ -108,7 +106,7 @@ public class MirrorFugue extends PApplet {
 	  //fill(255);
 	  //rect(0, 500, width, 800);
 	  imageMode(CORNER);
-	  image(bkg, 0, 460);
+	  image(bkg,60, 400);
 	  imageMode(CENTER);
   }
 
@@ -131,28 +129,28 @@ public class MirrorFugue extends PApplet {
 			  PerformanceManager.getCurrentPerformance().drawFace(this);
 	  } 
 	  
-//	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
-//		  if(noMotionSensor) {
-//		  
-//			  PerformanceManager.setRandomPerformance();
-//			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-//			  return;
-//		  }
-//		  
-//		  String inBuffer = null;
-//		  while(myPort.available() > 0) {
-//			  inBuffer = myPort.readStringUntil(95); // code for underscore
-//		  }
-//		  if (inBuffer != null) {
-//			  if (inBuffer.equals("YES_")) {
-//				  println("yes");
-//				  PerformanceManager.setRandomPerformance();
-//				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-//			  }
-//			  else 
-//				  println("no");
-//		  }
-//	  }
+	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
+		  if(noMotionSensor) {
+			  delay(2700);
+			  PerformanceManager.setNextPerformance();
+			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+			  return;
+		  }
+		  
+		  String inBuffer = null;
+		  while(myPort.available() > 0) {
+			  inBuffer = myPort.readStringUntil(95); // code for underscore
+		  }
+		  if (inBuffer != null) {
+			  if (inBuffer.equals("YES_")) {
+				  println("yes");
+				  PerformanceManager.setNextPerformance();
+				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+			  }
+			  else 
+				  println("no");
+		  }
+	  }
   }
   
   public void keyPressed() {
@@ -179,6 +177,17 @@ public class MirrorFugue extends PApplet {
 			  }
 			  break;
 	  	
+	    // Go to next performance
+	  	case 90:
+	  		if (!PerformanceManager.isCurrentlyPlaying())
+	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  		else {
+	  			PerformanceManager.getCurrentPerformance().stop();
+	  			PerformanceManager.setNextPerformance();
+	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+	  		}
+	  		break;		  
+			  
 	  	// SOUND or Disklavier	
 	  	case 96:						
 	  		bPlayMidi = false;
@@ -261,12 +270,12 @@ public class MirrorFugue extends PApplet {
 	GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	GraphicsDevice devices[] = environment.getScreenDevices();
 	String location;
-	if (devices.length > 1) {
-		primary_width = devices[0].getDisplayMode().getWidth();
-		location = "--location=" +primary_width+ "," + screen_y;
-	} else {
+//	if (devices.length > 1) {
+//		primary_width = devices[0].getDisplayMode().getWidth();
+//		location = "--location=" +primary_width+ "," + screen_y;
+//	} else {
 		location="--location=0,0";
-	}
+//	}
     PApplet.main(new String[] { location, MirrorFugue.class.getName() });
   }
 
