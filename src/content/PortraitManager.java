@@ -20,22 +20,23 @@ public class PortraitManager {
 	public static void initPortraits(MirrorFugue parent) {
 		portraits = new HashMap<String, Portrait>();
 				
-		pWidth = 426;	
-		pX = 1024 + pWidth*2;
-		pY = 68;
-
+		//pWidth = 426;	
+		//pX = 1024 + pWidth*2;
+		//px = 1024;
+		pY = 150;
+	
 		portraits.put("AT", new Portrait("AT", 	new GSMovie(parent, "nola/Portraits/240 AT init.mov"),
 												new GSMovie(parent, "nola/Portraits/240 AT sitting.mov"), 
-												new GSMovie(parent, "nola/Portraits/240 AT exit.mov"), 945+1024, pY));
+												new GSMovie(parent, "nola/Portraits/240 AT exit.mov"), 1024, pY)); //945+1024
 		portraits.put("JC", new Portrait("JC", 	new GSMovie(parent, "nola/Portraits/240 JC init.mov"), 
 												new GSMovie(parent, "nola/Portraits/240 JC sitting.mov"), 
-												new GSMovie(parent, "nola/Portraits/240 JC exit.mov"), 1374+1024, pY));
+												new GSMovie(parent, "nola/Portraits/240 JC exit.mov"), 1344, pY)); //1374+1024
 		portraits.put("RM", new Portrait("RM", 	new GSMovie(parent, "nola/Portraits/240 RM init.mov"), 
-												new GSMovie(parent, "nola/Portraits/240 RM init.mov"), 
-												new GSMovie(parent, "nola/Portraits/240 RM exit.mov"), 1800+1024, pY));
+												new GSMovie(parent, "nola/Portraits/240 RM sitting.mov"), 
+												new GSMovie(parent, "nola/Portraits/240 RM exit.mov"), 1664, pY)); //1374+1024
 		portraits.put("NS", new Portrait("NS", 	new GSMovie(parent, "nola/Portraits/240 NS init.mov"), 
 												new GSMovie(parent, "nola/Portraits/240 NS sitting.mov"), 
-												new GSMovie(parent, "nola/Portraits/240 NS exit.mov"), 2225+1024, pY));
+												new GSMovie(parent, "nola/Portraits/240 NS exit.mov"), 1984, pY)); //2225
 
 		System.out.println("Done loading portraits!");
 	}

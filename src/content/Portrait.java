@@ -47,20 +47,20 @@ public class Portrait {
 		current_movie.play();
 	}
 	
-	public void playSitting() {
-		exit_movie.stop();
-		exit_movie.goToBeginning();
-	
+	public void playSitting() {	
 		current_movie = sitting_movie;
 		sitting_movie.play();
+		
+		exit_movie.stop();
+		exit_movie.goToBeginning();
 	}
 	
 	public void playExit() {
-		sitting_movie.stop();
-		sitting_movie.goToEnd();
-		
 		current_movie = exit_movie;
 		exit_movie.play();
+		
+		sitting_movie.stop();
+		sitting_movie.goToEnd();
 	}
 	
 	public boolean finishedExit() {

@@ -53,6 +53,10 @@ public class PerformanceManager {
 				plane_0, plane_1, plane_2));
 		allPerformances.put("NS", createPerformance(parent, "nola", "NS2", "NS", "Simple", 
 				plane_0, plane_1, plane_2));
+		allPerformances.put("AI", createPerformance(parent, "alisa", "twinkle", "NS", "Simple", 
+				plane_0, plane_1, plane_2));
+		allPerformances.put("XX", createPerformance(parent, "xx", "satie", "NS", "Simple", 
+				plane_0, plane_1, plane_2));
 		
 		playlist.add(allPerformances.get("AT"));
 		playlist.add(allPerformances.get("JC"));
@@ -67,7 +71,8 @@ public class PerformanceManager {
 	public static void initKeyMappings() {
 		keyMappings = new HashMap<Integer, String>();
 
-		keyMappings.put(new Integer(101), "satie"); // 5
+		keyMappings.put(new Integer(102), "AI"); // 5
+		keyMappings.put(new Integer(101), "XX"); // 5
 		
 		keyMappings.put(new Integer(100), "NS"); // 4
 		keyMappings.put(new Integer(99), "RM"); // 3

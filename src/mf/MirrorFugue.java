@@ -50,18 +50,18 @@ public class MirrorFugue extends PApplet {
   }
   
   public void setup() {
-	if (displays <= 2)  
-		size(3584, 768, P3D); 
-	else if (displays == 3)
-		size(4864, 1080, P3D);
-	
+	//if (displays <= 2)  
+	size(1024, 800, P3D);
+	//else if (displays == 3)
+	//	//size(4864, 1080, P3D);
+	//	size(1024+1280, 900, P3D);  
+		
 	background(0);
     fill(0);
     noStroke();
     imageMode(CENTER);
     
-    bkg = loadImage("bkg.jpg");
-    info = loadImage("nola/wall info blank.jpg");
+    info = loadImage("nola/artist info.jpg");
     
     initCalibrationGUI();
   
@@ -112,7 +112,7 @@ public class MirrorFugue extends PApplet {
   
   private void drawText() {
 	  imageMode(CORNER);
-	  image(info, 1024, 0);
+	  image(info, 1024, 30);
 	  imageMode(CENTER);
   }
   
@@ -137,9 +137,9 @@ public class MirrorFugue extends PApplet {
   public void draw() {
 	  if (!started)
 		  return;
+	 
+	  //PortraitManager.drawPortraits(this);
 	  
-	  PortraitManager.drawPortraits(this);
-
 	  if (PerformanceManager.isCurrentlyPlaying()) {
 		  PerformanceManager.getCurrentPerformance().drawHandsOnKeys(surfaceMapping.getSurface(0), surfaceMapping.getSurface(1), surfaceMapping.getSurface(2));	
 		  PerformanceManager.getCurrentPerformance().drawFace(this);
@@ -148,7 +148,7 @@ public class MirrorFugue extends PApplet {
 	  // when a performance is done, new player walks in, old player walks off
 	  else if (PerformanceManager.isEnded() && !PortraitManager.transitionedPlayer) {
 		  println("A performance just ended");
-		  PortraitManager.transitionPlayer();
+		  //PortraitManager.transitionPlayer();
 		  PerformanceManager.setNextPerformance();
 	  } 
 	  
@@ -156,7 +156,6 @@ public class MirrorFugue extends PApplet {
 		  println("Next Performance Ready");
 		  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 	  }
-	  
   }
   
   public void keyPressed() {
@@ -200,8 +199,6 @@ public class MirrorFugue extends PApplet {
 	  			return;
 	  		if (PerformanceManager.handleKeyPress(keyCode))
 	  			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-	  		
-
 	  		break;
 	  }
   }
@@ -249,10 +246,12 @@ public class MirrorFugue extends PApplet {
 	 * 
 	 */
 	int projector_width = 1024;
+	int offset = 100;
 	
 	String location;
-	location="--location=-" + projector_width + ",0";
-    PApplet.main(new String[] { location, MirrorFugue.class.getName() });
+	//location="--location=-" + projector_width + ",0";
+	location="--location=-1024,0";
+	PApplet.main(new String[] { location, MirrorFugue.class.getName() });
   }
 
 }
