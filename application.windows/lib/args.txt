@@ -1,0 +1,3 @@
+-Xmx1500m -Xms1500m
+mf.MirrorFugue
+MirrorFugue.jar

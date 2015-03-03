@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Mapping>
+  <surface id="0">
+    <TL x="91" y="483" />
+    <TR x="335" y="486" />
+    <BL x="-39" y="724" />
+    <BR x="279" y="724" />
+  </surface>
+  <surface id="1">
+    <TL x="332" y="482" />
+    <TR x="564" y="489" />
+    <BL x="272" y="726" />
+    <BR x="574" y="729" />
+  </surface>
+  <surface id="2">
+    <TL x="561" y="488" />
+    <TR x="797" y="490" />
+    <BL x="574" y="730" />
+    <BR x="879" y="732" />
+  </surface>
+</Mapping>

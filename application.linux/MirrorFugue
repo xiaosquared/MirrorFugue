@@ -1,0 +1,4 @@
+#!/bin/sh
+
+APPDIR=$(dirname "$0")
+java -Xmx1500m -Xms1500m -Djava.library.path="$APPDIR" -cp "lib/MirrorFugue.jar"mf.MirrorFugue
