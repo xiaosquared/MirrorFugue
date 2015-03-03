@@ -19,12 +19,12 @@ public class Performance {
 	// parameters
 	boolean bPlaying = false;
 	boolean bPlayMidi;
-	//float scale_face = 0.270f;
-	float scale_face = 0.32f;
+	float scale_face = 0.34f;
+	//float scale_face = 0.317f;
 	float scale_hands = 0.608f;
-	//float y_offset = 0.27f;
-	float y_offset = 0.25f;
-	float x_offset = 0.46f;
+	//float y_offset = 0.275f;
+	float y_offset = 0.23f;
+	float x_offset = 0.45f;
 	
 	// planes for keyboard
 	PGraphics plane_0;

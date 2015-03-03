@@ -55,7 +55,7 @@ public class MirrorFugue extends PApplet {
     noStroke();
     imageMode(CENTER);
     
-    bkg = loadImage("bkg4.jpg");
+    bkg = loadImage("bkg7.jpg");
     
     // Calibration GUI
     cp5 = new ControlP5(this);
@@ -106,7 +106,7 @@ public class MirrorFugue extends PApplet {
 	  //fill(255);
 	  //rect(0, 500, width, 800);
 	  imageMode(CORNER);
-	  image(bkg,60, 400);
+	  image(bkg,0, 400);
 	  imageMode(CENTER);
   }
 
@@ -129,28 +129,28 @@ public class MirrorFugue extends PApplet {
 			  PerformanceManager.getCurrentPerformance().drawFace(this);
 	  } 
 	  
-	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
-		  if(noMotionSensor) {
-			  delay(2700);
-			  PerformanceManager.setNextPerformance();
-			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-			  return;
-		  }
-		  
-		  String inBuffer = null;
-		  while(myPort.available() > 0) {
-			  inBuffer = myPort.readStringUntil(95); // code for underscore
-		  }
-		  if (inBuffer != null) {
-			  if (inBuffer.equals("YES_")) {
-				  println("yes");
-				  PerformanceManager.setNextPerformance();
-				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-			  }
-			  else 
-				  println("no");
-		  }
-	  }
+//	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
+//		  if(noMotionSensor) {
+//			  delay(2700);
+//			  PerformanceManager.setNextPerformance();
+//			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+//			  return;
+//		  }
+//		  
+//		  String inBuffer = null;
+//		  while(myPort.available() > 0) {
+//			  inBuffer = myPort.readStringUntil(95); // code for underscore
+//		  }
+//		  if (inBuffer != null) {
+//			  if (inBuffer.equals("YES_")) {
+//				  println("yes");
+//				  PerformanceManager.setNextPerformance();
+//				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
+//			  }
+//			  else 
+//				  println("no");
+//		  }
+//	  }
   }
   
   public void keyPressed() {
@@ -270,12 +270,12 @@ public class MirrorFugue extends PApplet {
 	GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	GraphicsDevice devices[] = environment.getScreenDevices();
 	String location;
-//	if (devices.length > 1) {
-//		primary_width = devices[0].getDisplayMode().getWidth();
-//		location = "--location=" +primary_width+ "," + screen_y;
-//	} else {
+	if (devices.length > 1) {
+		primary_width = devices[0].getDisplayMode().getWidth();
+		location = "--location=" +primary_width+ "," + screen_y;
+	} else {
 		location="--location=0,0";
-//	}
+	}
     PApplet.main(new String[] { location, MirrorFugue.class.getName() });
   }
 
