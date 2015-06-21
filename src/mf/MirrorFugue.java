@@ -23,7 +23,7 @@ public class MirrorFugue extends PApplet {
   boolean bPlayMidi = true; 
   
   boolean bStudy = true;
-  boolean noMotionSensor = true;
+  boolean noMotionSensor = false;
   
   //SERIAL
   Serial myPort;
@@ -49,8 +49,7 @@ public class MirrorFugue extends PApplet {
   
   public void setup() {
     size(1024, 768, P3D);
-    //size(1280, 1024, P3D);
-	  background(0);
+    background(0);
     fill(0);
     noStroke();
     imageMode(CENTER);
@@ -109,7 +108,7 @@ public class MirrorFugue extends PApplet {
 	  //fill(255);
 	  //rect(0, 500, width, 800);
 	  imageMode(CORNER);
-	  image(bkg,60, 400);
+	  image(bkg, 0, 460);
 	  imageMode(CENTER);
   }
 
@@ -134,7 +133,6 @@ public class MirrorFugue extends PApplet {
 	  
 	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
 		  if(noMotionSensor) {
-			  delay(2700);
 			  PerformanceManager.setNextPerformance();
 			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
 			  return;
@@ -273,12 +271,12 @@ public class MirrorFugue extends PApplet {
 	GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	GraphicsDevice devices[] = environment.getScreenDevices();
 	String location;
-//	if (devices.length > 1) {
-//		primary_width = devices[0].getDisplayMode().getWidth();
-//		location = "--location=" +primary_width+ "," + screen_y;
-//	} else {
+	if (devices.length > 1) {
+		primary_width = devices[0].getDisplayMode().getWidth();
+		location = "--location=" +primary_width+ "," + screen_y;
+	} else {
 		location="--location=0,0";
-//	}
+	}
     PApplet.main(new String[] { location, MirrorFugue.class.getName() });
   }
 
