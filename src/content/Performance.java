@@ -18,11 +18,15 @@ public class Performance {
 	
 	// parameters
 	boolean bPlaying = false;
-	boolean bPlayMidi;
-	//float scale_face = 0.336f;
-	float scale_face = 0.336f;
+	boolean bPlayMidi = true;
+	float scale_face = 0.395f;
+	//float scale_face = 0.317f;
 	float scale_hands = 0.608f;
-	float y_offset = 0.27f;
+	//float y_offset = 0.275f;
+	float y_offset = 0.43f;
+	//float y_offset = 0.15f;
+	float x_offset = 0.55f;
+	//float x_offset = 0.f;
 	
 	// planes for keyboard
 	PGraphics plane_0;
@@ -44,6 +48,25 @@ public class Performance {
 		plane_0 = plane0;
 		plane_1 = plane1;
 		plane_2 = plane2;
+	}
+	
+	public Performance(String songFullName, String playerFullName,
+			GSMovie movie_hands, GSMovie movie_face, String midi_file,
+			PGraphics plane0, PGraphics plane1, PGraphics plane2, boolean bPlayMidi) {
+		this.song = songFullName;
+		this.player = playerFullName;
+		this.movie_hands = movie_hands;
+		this.movie_face = movie_face;
+
+		//midi = new midi.MidiPlayer();
+		//midi.openMidi(midi_file);
+		this.midi_file = midi_file;
+
+		plane_0 = plane0;
+		plane_1 = plane1;
+		plane_2 = plane2;
+
+		this.bPlayMidi = bPlayMidi;
 	}
 	
 	public Performance(GSMovie movie_hands, GSMovie movie_face, String midi_file,
@@ -71,7 +94,7 @@ public class Performance {
 	
 	public void drawFace(PApplet parent) {
 		parent.pushMatrix();
-			parent.translate(parent.width * 0.48f, parent.height * y_offset);
+			parent.translate(parent.width * x_offset, parent.height * y_offset);
 			parent.scale(-scale_face, scale_face);
 			parent.image(movie_face, 0,0);
 		parent.popMatrix();
@@ -128,7 +151,7 @@ public class Performance {
 		movie_hands.play();
 		movie_face.play();
 		
-		if (bPlayMidi) {
+		if (bPlayMidi && this.bPlayMidi) {
 			movie_hands.volume(0);
 		}
 		movie_face.volume(0);

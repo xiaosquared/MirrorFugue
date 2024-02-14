@@ -15,22 +15,31 @@ public class PerformanceManager {
 	static HashMap<Integer, String> keyMappings;
 	
 	static ArrayList<PianistPlaylist> playlist;
+	
+	static PianistPlaylist eegStudyPlaylist;
+	
 	static int playlistIndex = -1;
 	
-	static final int midi_delay = 400;
+	static final int midi_delay = 350;
 	
 	public static void initPerformances(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
 		allPerformances = new HashMap<String, Performance>();
 		playlist = new ArrayList<PianistPlaylist>();
 		
-		initFidelity(parent, plane_0, plane_1, plane_2);
+		eegStudyPlaylist = new PianistPlaylist();
+		
+		initEEG(parent, plane_0, plane_1, plane_2);
+		initEEG2(parent, plane_0, plane_1, plane_2);
 //		initXX(parent, plane_0, plane_1, plane_2);
 //		initDonal(parent, plane_0, plane_1, plane_2);
-//		initAlisa(parent, plane_0, plane_1, plane_2);
-//		initRyuichi(parent, plane_0, plane_1, plane_2);
+		initAlisa(parent, plane_0, plane_1, plane_2);
+		initRyuichi(parent, plane_0, plane_1, plane_2);
 //		initMarvin(parent, plane_0, plane_1, plane_2);
 		
-		currentPerformance = allPerformances.get("1");
+//		currentPerformance = allPerformances.get("P1_2");		// for EEG
+//        currentPerformance = allPerformances.get("P4_1_dark");		// for EEG
+//		currentPerformance = allPerformances.get("P1_2_dark"); // for EEG2
+        currentPerformance = allPerformances.get("P4_1");		// for EEG
 		currentPerformance.loadMidi();
 
 		initKeyMappings();
@@ -40,28 +49,99 @@ public class PerformanceManager {
 	
 	private static Performance createPerformance(PApplet parent, String player, String song, 
 												String playerFullName, String songFullName, 
-												PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+												PGraphics plane_0, PGraphics plane_1, PGraphics plane_2, boolean bPlayMidi) {
 		String handsMovieFile = player + "/" + song + "_HANDS.mov";
 		String faceMovieFile = player + "/" + song + "_FACE.mov";
 		String midiFile = "data/" + player + "/" + song + ".MID";
 		
 		return new Performance(	songFullName, playerFullName,
 								new GSMovie(parent, handsMovieFile), new GSMovie(parent, faceMovieFile), midiFile, 
-								plane_0, plane_1, plane_2);
+								plane_0, plane_1, plane_2, bPlayMidi);
+	}
+	
+	private static Performance createPerformance(PApplet parent, String player, String song, 
+			String playerFullName, String songFullName, 
+			PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String handsMovieFile = player + "/" + song + "_HANDS.mov";
+		String faceMovieFile = player + "/" + song + "_FACE.mov";
+		String midiFile = "data/" + player + "/" + song + ".MID";
+
+		return new Performance(	songFullName, playerFullName,
+				new GSMovie(parent, handsMovieFile), new GSMovie(parent, faceMovieFile), midiFile, 
+				plane_0, plane_1, plane_2);
 	}
 	
 	/** Load performances by me! */
-	private static void initFidelity(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
-		String playerFullName = "Xiao Xiao";
-		allPerformances.put("1", createPerformance(parent, "_fidelity", "bagatelle1", playerFullName, "", 
-				plane_0, plane_1, plane_2));
-		allPerformances.put("donal", createPerformance(parent, "_fidelity", "ub_short", playerFullName, "", 
-				plane_0, plane_1, plane_2));
-		allPerformances.put("alisa", createPerformance(parent, "_fidelity", "twinkle_short", playerFullName, "", 
-				plane_0, plane_1, plane_2));
-		allPerformances.put("finale", createPerformance(parent, "_fidelity", "finale2", playerFullName, "", 
-				plane_0, plane_1, plane_2));
+	private static void initEEG(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String playerFullName = "EEG Study";
+
+		allPerformances.put("P1_2", createPerformance(parent, "EEG", "P1_2", playerFullName, "Player 1, Piece 2", plane_0, plane_1, plane_2));
+	
+		allPerformances.put("P1_1_dark", createPerformance(parent, "EEG", "P1_1_dark", playerFullName, "Player 1, Piece 1", plane_0, plane_1, plane_2, false));
+
+		allPerformances.put("P2_4_dark", createPerformance(parent, "EEG", "P2_4_dark", playerFullName, "Player 2, Piece 2", plane_0, plane_1, plane_2, false));
+
+		allPerformances.put("P2_2", createPerformance(parent, "EEG", "P2_2", playerFullName, "Player 1, Piece 2", plane_0, plane_1, plane_2));
+		
+		allPerformances.put("P4_1_dark", createPerformance(parent, "EEG", "P4_1_dark", playerFullName, "Player 4, Piece 3", plane_0, plane_1, plane_2, false));
+		
+		allPerformances.put("P4_3", createPerformance(parent, "EEG", "P4_3", playerFullName, "Player 1, Piece 2", plane_0, plane_1, plane_2));
+		
+		allPerformances.put("mozart", createPerformance(parent, "EEG", "mozart", playerFullName, "Player 3, Piece 2", plane_0, plane_1, plane_2, false));
+		
+		allPerformances.put("chopin", createPerformance(parent, "EEG", "chopin", playerFullName, "Player 3, Piece 3", plane_0, plane_1, plane_2));
+		
+		allPerformances.put("prelude", createPerformance(parent, "EEG", "P3_prelude", playerFullName, "Player 3, Piece 3", plane_0, plane_1, plane_2));
+		
+		
+		//eegStudyPlaylist.addPerformance(allPerformances.get("twinkle"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P1_2"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P1_1_dark"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P2_2"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P2_4_dark"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P4_3"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P4_1_dark"));
+		
+		eegStudyPlaylist.addPerformance(allPerformances.get("P4_1_dark"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P4_3"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P1_1_dark"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P1_2"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P2_4_dark"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P2_2"));
 	}
+	
+	private static void initEEG2(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
+		String playerFullName = "EEG Study";
+
+		allPerformances.put("P1_2_dark", createPerformance(parent, "EEG2", "P1_2_dark", playerFullName, "Player 1, Piece 2", plane_0, plane_1, plane_2, false));
+	
+		allPerformances.put("P1_1", createPerformance(parent, "EEG2", "P1_1", playerFullName, "Player 1, Piece 1", plane_0, plane_1, plane_2));
+
+		allPerformances.put("P2_4", createPerformance(parent, "EEG2", "P2_4", playerFullName, "Player 2, Piece 2", plane_0, plane_1, plane_2));
+
+		allPerformances.put("P2_2_dark", createPerformance(parent, "EEG2", "P2_2_dark", playerFullName, "Player 1, Piece 2", plane_0, plane_1, plane_2, false));
+		
+		allPerformances.put("P4_1", createPerformance(parent, "EEG2", "P4_1", playerFullName, "Player 4, Piece 3", plane_0, plane_1, plane_2));
+		
+		allPerformances.put("P4_3_dark", createPerformance(parent, "EEG2", "P4_3_dark", playerFullName, "Player 1, Piece 2", plane_0, plane_1, plane_2, false));
+		
+		
+		//eegStudyPlaylist.addPerformance(allPerformances.get("twinkle"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P1_2_dark"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P1_1"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P2_2_dark"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P2_4"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P4_3_dark"));
+//		eegStudyPlaylist.addPerformance(allPerformances.get("P4_1"));
+//		
+		eegStudyPlaylist.addPerformance(allPerformances.get("P4_1"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P4_3_dark"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P1_1"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P1_2_dark"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P2_4"));
+		eegStudyPlaylist.addPerformance(allPerformances.get("P2_2_dark"));
+	}
+
 	
 	/** Load performances by me! */
 	private static void initXX(PApplet parent, PGraphics plane_0, PGraphics plane_1, PGraphics plane_2) {
@@ -139,18 +219,19 @@ public class PerformanceManager {
 	
 	public static void initKeyMappings() {
 		keyMappings = new HashMap<Integer, String>();
-		keyMappings.put(new Integer(103), "donal"); 	// 7
-		keyMappings.put(new Integer(104), "alisa"); // 8
-		//keyMappings.put(new Integer(105), "marvin"); // 9
+		
+		keyMappings.put(new Integer(49), "improv"); 	// 7 103
+		keyMappings.put(new Integer(50), "P2_2"); // 8 104
+		keyMappings.put(new Integer(51), "P4_3"); // 9 105
 	
 		
-		keyMappings.put(new Integer(100), "1"); // 4
-		//keyMappings.put(new Integer(101), "1"); // 5
-		//keyMappings.put(new Integer(102), "prelude"); // 6
+		keyMappings.put(new Integer(100), "P1_1"); // 4
+		keyMappings.put(new Integer(101), "P2_4"); // 5
+		keyMappings.put(new Integer(102), "P4_1"); // 6
 		
-		//keyMappings.put(new Integer(99), "autumn leaves"); // 3
-		//keyMappings.put(new Integer(98), "5"); // 2
-		keyMappings.put(new Integer(97), "finale"); // 1
+		keyMappings.put(new Integer(99), "mozart"); // 3
+		keyMappings.put(new Integer(98), "chopin"); // 2
+		keyMappings.put(new Integer(97), "prelude"); // 1
 	}
 	
 	public static boolean handleKeyPress(int key) {
@@ -214,13 +295,19 @@ public class PerformanceManager {
 		return currentPerformance;
 	}
 
-	public static void setNextPerformance() {
-		if (playlistIndex < (playlist.size()-1))
-			playlistIndex ++;
-		else
-			playlistIndex = 0;
-		
-		currentPerformance = playlist.get(playlistIndex).getNextPerformance();
+	public static boolean setNextPerformance() {
+		if (eegStudyPlaylist.atEnd()) {
+			return false;
+		} else {
+			currentPerformance = eegStudyPlaylist.getNextPerformance();
+			return true;
+		}
+//		if (playlistIndex < (playlist.size()-1))
+//			playlistIndex ++;
+//		else
+//			playlistIndex = 0;
+//		
+//		currentPerformance = playlist.get(playlistIndex).getNextPerformance();
 	}
 	
 	/**

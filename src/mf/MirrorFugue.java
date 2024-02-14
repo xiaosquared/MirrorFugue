@@ -23,7 +23,7 @@ public class MirrorFugue extends PApplet {
   boolean bPlayMidi = true; 
   
   boolean bStudy = true;
-  boolean noMotionSensor = false;
+  boolean bAutoPlayNext = false;
   
   //SERIAL
   Serial myPort;
@@ -97,9 +97,6 @@ public class MirrorFugue extends PApplet {
     
     // load performances
     PerformanceManager.initPerformances(this, plane_0, plane_1, plane_2);
-     
-    //Serial
-    myPort = new Serial(this, Serial.list()[0], 9600);
   }
   
   private void clearScreen() {
@@ -108,7 +105,7 @@ public class MirrorFugue extends PApplet {
 	  //fill(255);
 	  //rect(0, 500, width, 800);
 	  imageMode(CORNER);
-	  image(bkg, 0, 460);
+	  image(bkg, 100, 500);
 	  imageMode(CENTER);
   }
 
@@ -132,24 +129,11 @@ public class MirrorFugue extends PApplet {
 	  } 
 	  
 	  else if (PerformanceManager.isEnded() && PerformanceManager.startNextPerformance()){
-		  if(noMotionSensor) {
-			  PerformanceManager.setNextPerformance();
-			  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-			  return;
-		  }
-		  
-		  String inBuffer = null;
-		  while(myPort.available() > 0) {
-			  inBuffer = myPort.readStringUntil(95); // code for underscore
-		  }
-		  if (inBuffer != null) {
-			  if (inBuffer.equals("YES_")) {
-				  println("yes");
-				  PerformanceManager.setNextPerformance();
+		  if(bAutoPlayNext) {
+			  boolean stillGoing = PerformanceManager.setNextPerformance();
+			  if (stillGoing)
 				  PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-			  }
-			  else 
-				  println("no");
+			  return;
 		  }
 	  }
   }
@@ -164,11 +148,7 @@ public class MirrorFugue extends PApplet {
 	  }
 	  switch (keyCode) {
 	  	case 10:
-		  if (PerformanceManager.isCurrentlyPlaying()) 
-			  PerformanceManager.pauseCurrentPerformance();
-		  else {  
-			PerformanceManager.playCurrentPerformance(this, bPlayMidi);
-		  }
+		  bAutoPlayNext = true;
 		  break;
 	  	case 32:
 			  if (PerformanceManager.isCurrentlyPlaying()) 

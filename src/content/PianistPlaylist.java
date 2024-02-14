@@ -16,14 +16,18 @@ public class PianistPlaylist {
 		total++;
 	}
 	
+	public boolean atEnd() {
+		return counter == total;
+	}
+	
 	public Performance getNextPerformance() {
 		if (total == 1)
 			return pieces.get(0);
 		else { 
 			Performance p = pieces.get(counter);
 			counter++;
-			if (counter == total)
-				counter = 0;
+//			if (counter == total)
+//				counter = 0;
 			return p;
 		}
 	}
